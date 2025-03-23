@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/category_filter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,80 +9,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String selectedCategory = "All";
+
+  void onCategorySelected(String category) {
+    setState(() {
+      selectedCategory = category;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // _getCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          "Hello, John Doe",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: "Poppins",
-          )
-        ),
-        backgroundColor: Color(0xFFF5F5F5),
-        leading: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image(image: AssetImage("assets/images/Intrnip.png"))
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Icon(
-                        Icons.notifications_outlined,
-                        color: Colors.black,
-                        size: 32,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.chat_outlined,
-                        color: Colors.black,
-                        size: 32,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-        centerTitle: false,
-        shadowColor: Colors.black,
-        elevation: 2,
-      ),
+      appBar: homeAppBar(),
       body: Column(
         children: [
           SizedBox(height: 24),
@@ -91,9 +37,84 @@ class _HomePageState extends State<HomePage> {
               child: searchBox(),
             ),
           ),
-          SizedBox(height: 24,),
+          SizedBox(height: 16,),
+          CategoryFilter(onCategorySelected: onCategorySelected),
+          const SizedBox(height: 20),
         ],
       )
+    );
+  }
+
+  AppBar homeAppBar() {
+    return AppBar(
+      title: Text(
+        "Hello, John Doe",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontFamily: "Poppins",
+        )
+      ),
+      backgroundColor: Color(0xFFF5F5F5),
+      leading: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Image(image: AssetImage("assets/images/Intrnip.png"))
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.black,
+                      size: 32,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.chat_outlined,
+                      color: Colors.black,
+                      size: 32,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+      centerTitle: false,
+      shadowColor: Colors.black,
+      elevation: 2,
     );
   }
 
