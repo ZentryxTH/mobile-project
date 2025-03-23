@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/category_filter.dart';
+import 'package:intrn/job_card_list.dart';
+import 'package:intrn/job_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,7 +41,24 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 16,),
           CategoryFilter(onCategorySelected: onCategorySelected),
-          const SizedBox(height: 20),
+          SizedBox(height: 16),
+          JobListView(),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                Text("Recent Job",
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16),
         ],
       )
     );
@@ -159,4 +178,20 @@ class _HomePageState extends State<HomePage> {
               ),
             );
   }
+}
+
+class JobListView extends StatelessWidget {
+  const JobListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<JobCardList> jobs = JobCardList.getJobList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: jobs.map((job) => JobCard(job: job)).toList(),
+      ),
+    );
+ }
 }
