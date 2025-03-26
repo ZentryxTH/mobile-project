@@ -68,7 +68,7 @@ class _JobCardState extends State<JobCard> {
               ),
             ],
           ),
-          SizedBox(height: 1),
+          SizedBox(height: 4),
           Text(
             widget.job.jobRole,
             style: const TextStyle(
@@ -77,20 +77,25 @@ class _JobCardState extends State<JobCard> {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 1),
+          SizedBox(height: 6),
           Wrap(
             spacing: 6,
             children: widget.job.labels.map((label) {
-              return Chip(
-                label: Text(label, 
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6), // Padding inside the capsule
+                decoration: BoxDecoration(
+                  color: _getLabelColor(label),
+                  borderRadius: BorderRadius.circular(30), // Makes it capsule-shaped
+                ),
+                child: Text(
+                  label,
                   style: TextStyle(
                     fontFamily: "Poppins",
                     fontSize: 10,
+                    fontWeight: FontWeight.bold,
                     color: Colors.black,
-                  )
+                  ),
                 ),
-                backgroundColor: _getLabelColor(label),
-                padding: EdgeInsets.symmetric(horizontal: 4),
               );
             }).toList(),
           ),

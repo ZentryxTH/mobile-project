@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intrn/category_filter.dart';
 import 'package:intrn/job_card_list.dart';
 import 'package:intrn/job_card.dart';
+import 'package:intrn/recent_job.dart';
+import 'package:intrn/recent_job_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,40 +29,54 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<RecentJobList> recentJobs = RecentJobList.getRecentJob();
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: homeAppBar(),
-      body: Column(
-        children: [
-          SizedBox(height: 24),
-          Center(
-            child: SizedBox(
-              width: 320,
-              child: searchBox(),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 24),
+            Center(
+              child: SizedBox(
+                width: 320,
+                child: searchBox(),
+              ),
             ),
-          ),
-          SizedBox(height: 16,),
-          CategoryFilter(onCategorySelected: onCategorySelected),
-          SizedBox(height: 16),
-          JobListView(),
-          SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Row(
-              children: [
-                Text("Recent Job",
-                  style: TextStyle(
-                    fontFamily: "Poppins",
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
+            SizedBox(height: 16,),
+            CategoryFilter(onCategorySelected: onCategorySelected),
+            SizedBox(height: 16),
+            JobListView(),
+            SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  Text("Recently Jobs",
+                    style: TextStyle(
+                      fontFamily: "Poppins",
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 16),
-        ],
-      )
+            SizedBox(height: 16),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: recentJobs.length,
+              itemBuilder: (context, index) {
+                return RecentJob(job: recentJobs[index]); // Updated to use RecentJob
+              },
+            )
+          ],
+        )
+      ),
     );
   }
 
