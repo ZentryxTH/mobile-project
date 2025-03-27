@@ -129,9 +129,9 @@ Color _getLabelColor(String label) {
     case "Online":
       return Color.fromARGB(255, 75, 180, 255);
     case "Intern":
-      return Color.fromARGB(255, 255, 187, 61);
+      return Color.fromARGB(255, 255, 206, 116);
     case "Hybrid":
-      return Color.fromARGB(255, 255, 61, 61);
+      return Color.fromARGB(255, 255, 140, 140);
     case "Senior":
       return Color.fromARGB(255, 162, 255, 81);
     case "Onsite":
@@ -141,7 +141,7 @@ Color _getLabelColor(String label) {
     case "Junior":
       return Color.fromARGB(255, 208, 126, 255);
     case "New-Grad":
-      return Color.fromARGB(255, 65, 97, 255);
+      return Color.fromARGB(255, 117, 140, 255);
     default:
       return Colors.black;
   }
