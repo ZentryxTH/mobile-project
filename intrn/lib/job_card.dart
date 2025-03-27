@@ -19,8 +19,11 @@ class _JobCardState extends State<JobCard> {
       margin: EdgeInsets.all(8),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 255, 122, 39),
         borderRadius: BorderRadius.circular(20),
+        image: DecorationImage(
+          image: AssetImage("assets/images/CardTemplate.png"),
+          fit: BoxFit.fill,
+        )
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +43,14 @@ class _JobCardState extends State<JobCard> {
                       fontFamily: "Poppins",
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.black,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1),
+                          blurRadius: 4,
+                          color:  Color.fromARGB(255, 77, 77, 77),
+                        )
+                      ],
                     ),
                   ),
                   Text(
@@ -49,7 +59,7 @@ class _JobCardState extends State<JobCard> {
                       fontFamily: "Poppins",
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.black,
                     )
                   ),
                 ],
@@ -75,6 +85,13 @@ class _JobCardState extends State<JobCard> {
               fontWeight: FontWeight.bold,
               fontSize: 20,
               color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(2,2),
+                  blurRadius: 4,
+                  color: Colors.grey,
+                )
+              ],
             ),
           ),
           SizedBox(height: 6),

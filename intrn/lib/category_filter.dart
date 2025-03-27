@@ -4,7 +4,7 @@ import 'package:intrn/category_filter_list.dart';
 class CategoryFilter extends StatefulWidget {
   final Function(String) onCategorySelected;
 
-  const CategoryFilter({Key? key, required this.onCategorySelected}) : super(key: key);
+  const CategoryFilter({super.key, required this.onCategorySelected});
 
   @override
   _CategoryFilterState createState() => _CategoryFilterState();
