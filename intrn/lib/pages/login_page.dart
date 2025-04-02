@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                             onTap: () {
                               // Navigator.push(
                               //   context,
-                              //   MaterialPageRoute(builder: (context) => SignupPage()), // Navigate to SignupPage
+                              //   MaterialPageRoute(builder: (context) => SignupPage()),
                               // );
                             },
                             child: Text(
@@ -195,6 +195,25 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
   }
 
+  TextField emailBox() {
+    return TextField(
+      controller: emailController,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Color.fromARGB(255, 239, 239, 239),
+        hintText: "Email",
+        hintStyle: TextStyle(
+          fontFamily: "Poppins",
+          fontSize: 16,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24),
+          borderSide: BorderSide.none,
+        )
+      ),
+    );
+  }
+
   TextField passwordBox() {
     return TextField(
       controller: passwordController,
@@ -217,25 +236,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             isObscure ? Icons.visibility_off : Icons.visibility,
             color: Colors.grey,
           ),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        )
-      ),
-    );
-  }
-
-  TextField emailBox() {
-    return TextField(
-      controller: emailController,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239),
-        hintText: "Email",
-        hintStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
