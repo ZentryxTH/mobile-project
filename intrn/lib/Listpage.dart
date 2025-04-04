@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'simulate/Homepage.dart';
-// import 'package:intrn/widget/list_card.dart';
+import 'package:intrn/widget/list_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       home: NavigationBars(),
       initialRoute: '/listpage',
       routes: {
-        '/homepage': (context) => const Homepage(),
-        '/listpage': (context) => const NavigationBars(),
+        '/homepage': (context) =>  Homepage(),
+        '/listpage': (context) =>  NavigationBars(),
         // '/profilepage': (context) => const ProfilePage(),
       },
     );
@@ -32,7 +32,7 @@ class NavigationBars extends StatefulWidget {
 
 class NavigationBarState extends State<NavigationBars>{
   // const NavigationBars({super.key});
-  int pageindex = 0 ;
+  int pageindex = 1 ;
   List<String> titles = <String>['Favourite', 'In progess', 'Applied'];
   
 
@@ -92,11 +92,13 @@ class Listpages extends StatefulWidget {
 }
 
 class Listpagestate extends State<Listpages> {
+  List<String> favouriteList = ['data scrience'];
+  List<String> inProgressList = [];
+  List<String> applicationList = [];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
+    return DefaultTabController(
         length: 3, 
         child: Scaffold(
           appBar: AppBar(
@@ -131,76 +133,51 @@ class Listpagestate extends State<Listpages> {
                   color: Colors.white,
                   child: TabBarView(
                   children: [
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Mycard()
-                            Icon(
-                              Icons.add_box_outlined, 
-                              size: 70.0, 
-                              color: Colors.grey, 
-                            ),
-                            SizedBox(
-                              height: 8.0,
-                            ), 
-                            Text(
-                              "Don't have any favourite", 
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_box_outlined, 
-                              size: 70.0, 
-                              color: Colors.grey, 
-                            ),
-                            SizedBox(
-                              height: 8.0,
-                            ), 
-                            Text(
-                              "Don't have any In progess", 
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ],
-                        ),
+                     favouriteList.isEmpty
+                          ? _buildEmptyState("Don't have any favourite")
+                          : ListView.builder(
+                            itemCount: favouriteList.length,
+                            itemBuilder: (context, index) {
+                              return Mycard(
+                                jobTitle: favouriteList[index],
+                                onFavoriteToggle: (title, isFav) {
+                                  setState(() {
+                                    if (isFav) {
+                                      favouriteList.add(title);
+                                    } else {
+                                      favouriteList.remove(title);
+                                    }
+                                  }
+                                  );
+                                },
+                              );
+
+                            },
                           ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_box_outlined, 
-                              size: 70.0, 
-                              color: Colors.grey, 
-                            ),
-                            SizedBox(
-                              height: 8.0,
-                            ), 
-                            Text(
-                              "Don't have any applications", 
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        ),
+                      inProgressList.isEmpty
+                          ? _buildEmptyState("Don't have any in progress")
+                          : ListView.builder(
+                            itemCount: inProgressList.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: ListTile(
+                                  title: Text(inProgressList[index]),
+                                ),
+                              );
+                            },
+                          ),
+                      applicationList.isEmpty
+                          ? _buildEmptyState("Don't have any applications")
+                          : ListView.builder(
+                            itemCount: applicationList.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: ListTile(
+                                  title: Text(applicationList[index]),
+                                ),
+                              );
+                            },
+                          ),
                     ],
                 ),
                 ),
@@ -208,8 +185,30 @@ class Listpagestate extends State<Listpages> {
             ],
           ),
         ),
-      ),
+
     );
   }
-  
+  Widget _buildEmptyState(String message) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.add_box_outlined,
+          size: 70.0,
+          color: Colors.grey,
+        ),
+        SizedBox(height: 8.0),
+        Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.0,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }

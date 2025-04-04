@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 
 class Mycard extends StatefulWidget {
-  const Mycard({super.key});
+  final String jobTitle;
+  final Function(String, bool) onFavoriteToggle;
+
+  const Mycard({super.key, required this.jobTitle, required this.onFavoriteToggle});
 
   @override
   State<Mycard> createState() => Mycardstate();
 }
 
+
 class Mycardstate extends State<Mycard> {
-  // const Mycardstate({super.key});
-  bool isFavorite = false;
+  bool isFavorite = true;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
+      elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.only(left: 20,right: 20),
+      margin: EdgeInsets.only(top: 20,left: 20,right: 20),
       color: const Color.fromARGB(255, 245, 245, 245),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,7 +31,7 @@ class Mycardstate extends State<Mycard> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8), 
                   child: Image.asset(
-                    'intrn/assets/logo.png', 
+                    'assets/SCB LOGO.png', 
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover, 
@@ -39,7 +42,7 @@ class Mycardstate extends State<Mycard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Data Engineer',
+                      widget.jobTitle,  
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Row(
@@ -62,6 +65,7 @@ class Mycardstate extends State<Mycard> {
                 setState(() {
                   isFavorite = !isFavorite;
                 });
+                widget.onFavoriteToggle(widget.jobTitle, isFavorite);
               },
             ),
           ],
@@ -69,6 +73,7 @@ class Mycardstate extends State<Mycard> {
       ),
     );
   }
+
   Widget _buildTag(String label, Color color) {
     return Container(
       margin: EdgeInsets.only(top: 8,right: 8),
@@ -84,3 +89,4 @@ class Mycardstate extends State<Mycard> {
     );
   }
 }
+
