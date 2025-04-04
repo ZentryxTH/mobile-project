@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/pages/create_profile_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -27,7 +28,39 @@ class _SignupPageState extends State<SignupPage> {
   String? errorMessage;
 
   void _signup() {
-    // Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
+
+    String email = emailController.text.trim();
+    String password = passwordController.text;
+    String confirmPassword = confirmPasswordController.text;
+
+    
+
+    setState(() {
+      errorMessage = null;
+    });
+
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+      setState(() {
+        errorMessage = "Invalid email format";
+      });
+      return;
+    }
+
+    if (password.length < 8) {
+      setState(() {
+        errorMessage = "Password must be at least 8 characters";
+      });
+      return;
+    }
+
+    if (password != confirmPassword) {
+      setState(() {
+        errorMessage = "Passwords do not match";
+      });
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(_fadeRoute(CreateProfilePage()));
   }
 
   @override
@@ -85,8 +118,18 @@ class _SignupPageState extends State<SignupPage> {
                                 passwordBox(),
                                 SizedBox(height: 24,),
                                 confirmPasswordBox(),
+                                if (errorMessage != null)
+                                  Text(
+                                    errorMessage!,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: "Poppins",
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 SizedBox(height: 16,),
                                 signupButton(),
+                                SizedBox(height: 10,),
                               ],
                             ),
                           )
