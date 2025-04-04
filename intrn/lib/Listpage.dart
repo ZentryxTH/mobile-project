@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'simulate/Homepage.dart';
+// import 'package:intrn/widget/list_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,6 +14,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
       home: NavigationBars(),
+      initialRoute: '/listpage',
+      routes: {
+        '/homepage': (context) => const Homepage(),
+        '/listpage': (context) => const NavigationBars(),
+        // '/profilepage': (context) => const ProfilePage(),
+      },
     );
   }
 }
@@ -26,6 +34,7 @@ class NavigationBarState extends State<NavigationBars>{
   // const NavigationBars({super.key});
   int pageindex = 0 ;
   List<String> titles = <String>['Favourite', 'In progess', 'Applied'];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +58,11 @@ class NavigationBarState extends State<NavigationBars>{
         setState(() {
           pageindex = index;
         });
+        if (index == 0) {
+              Navigator.pushNamed(context, '/homepage');
+            } 
       },
+      
       destinations: [
         NavigationDestination(
           icon: Icon(Icons.home_outlined, color: pageindex == 0 ? Colors.deepOrangeAccent : null),
@@ -66,19 +79,19 @@ class NavigationBarState extends State<NavigationBars>{
       ],
     ),
       ),
-      body: appbars(),
+      body: Listpages(),
     );
   }
 }
 
-class appbars extends StatefulWidget {
-  const appbars({super.key});
+class Listpages extends StatefulWidget {
+  const Listpages({super.key});
 
   @override
-  State<appbars> createState() => AppbarState();
+  State<Listpages> createState() => Listpagestate();
 }
 
-class AppbarState extends State<appbars> {
+class Listpagestate extends State<Listpages> {
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +135,7 @@ class AppbarState extends State<appbars> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Mycard()
                             Icon(
                               Icons.add_box_outlined, 
                               size: 70.0, 
@@ -131,7 +145,7 @@ class AppbarState extends State<appbars> {
                               height: 8.0,
                             ), 
                             Text(
-                              "Don't have any applications.", 
+                              "Don't have any favourite", 
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.grey,
@@ -141,8 +155,52 @@ class AppbarState extends State<appbars> {
                           ],
                         ),
                       ),
-                      Center(child: Text('In progress')),
-                      Center(child: Text('Applied')),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_box_outlined, 
+                              size: 70.0, 
+                              color: Colors.grey, 
+                            ),
+                            SizedBox(
+                              height: 8.0,
+                            ), 
+                            Text(
+                              "Don't have any In progess", 
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                          ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_box_outlined, 
+                              size: 70.0, 
+                              color: Colors.grey, 
+                            ),
+                            SizedBox(
+                              height: 8.0,
+                            ), 
+                            Text(
+                              "Don't have any applications", 
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        ),
                     ],
                 ),
                 ),
@@ -153,4 +211,5 @@ class AppbarState extends State<appbars> {
       ),
     );
   }
+  
 }
