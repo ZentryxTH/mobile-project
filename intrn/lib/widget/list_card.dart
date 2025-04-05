@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+
 class Mycard extends StatefulWidget {
   final String jobTitle;
+  final bool isInProgress;
+  final bool isApplied;
   final Function(String, bool) onFavoriteToggle;
+  
 
-  const Mycard({super.key, required this.jobTitle, required this.onFavoriteToggle});
+  const Mycard({super.key, required this.jobTitle,required this.isInProgress,required this.isApplied, required this.onFavoriteToggle});
 
   @override
   State<Mycard> createState() => Mycardstate();
@@ -56,20 +60,53 @@ class Mycardstate extends State<Mycard> {
                 ),
               ],
             ),
-            IconButton(
-              padding: EdgeInsets.only(bottom: 30),
-              iconSize: 30,
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: isFavorite ? Colors.red : Colors.grey,
-              ),
-              onPressed: () {
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
-                widget.onFavoriteToggle(widget.jobTitle, isFavorite);
-              },
-            ),
+            widget.isInProgress
+                ? Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 2, right: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      'Pending',
+                      style: TextStyle(fontSize: 9.5, color: Colors.black),
+                    ),
+                  ),
+                )
+                : widget.isApplied
+                ? Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 2, right: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      'Applied',
+                      style: TextStyle(fontSize: 9.5, color: Colors.black),
+                    ),
+                  ),
+                )
+                : IconButton(
+                  padding: EdgeInsets.only(bottom: 30),
+                  iconSize: 30,
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                    widget.onFavoriteToggle(widget.jobTitle, isFavorite);
+                  },
+                ),
+              
           ],
         ),
       ),

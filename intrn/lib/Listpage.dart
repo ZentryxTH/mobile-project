@@ -92,9 +92,9 @@ class Listpages extends StatefulWidget {
 }
 
 class Listpagestate extends State<Listpages> {
-  List<String> favouriteList = ['data scrience'];
-  List<String> inProgressList = [];
-  List<String> applicationList = [];
+  List<String> favouriteList = ['data science'];
+  List<String> inProgressList = ['data science'];
+  List<String> appliedlist = ['data science'];
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +130,8 @@ class Listpagestate extends State<Listpages> {
                             itemBuilder: (context, index) {
                               return Mycard(
                                 jobTitle: favouriteList[index],
+                                isInProgress: false,
+                                isApplied: false,
                                 onFavoriteToggle: (title, isFav) {
                                   setState(() {
                                     if (isFav) {
@@ -149,22 +151,42 @@ class Listpagestate extends State<Listpages> {
                           : ListView.builder(
                             itemCount: inProgressList.length,
                             itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  title: Text(inProgressList[index]),
-                                ),
+                              return Mycard(
+                                jobTitle: inProgressList[index],
+                                isInProgress: true,
+                                isApplied: false,
+                                onFavoriteToggle: (title, isFav) {
+                                  setState(() {
+                                    if (isFav) {
+                                      favouriteList.add(title);
+                                    } else {
+                                      favouriteList.remove(title);
+                                    }
+                                  }
+                                  );
+                                },
                               );
                             },
                           ),
-                      applicationList.isEmpty
+                      appliedlist.isEmpty
                           ? _buildEmptyState("Don't have any applications")
                           : ListView.builder(
-                            itemCount: applicationList.length,
+                            itemCount: appliedlist.length,
                             itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  title: Text(applicationList[index]),
-                                ),
+                              return Mycard(
+                                jobTitle: appliedlist[index],
+                                isInProgress: false,
+                                isApplied: true,
+                                onFavoriteToggle: (title, isFav) {
+                                  setState(() {
+                                    if (isFav) {
+                                      favouriteList.add(title);
+                                    } else {
+                                      favouriteList.remove(title);
+                                    }
+                                  }
+                                  );
+                                },
                               );
                             },
                           ),
