@@ -98,21 +98,11 @@ class Listpagestate extends State<Listpages> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return MaterialApp(
+      home: DefaultTabController(
         length: 3, 
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
-            title: Text(
-              'Job List',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          
-          ),
+          appBar: appbars(),
           body: Column(
             children: [
               Container(
@@ -186,7 +176,39 @@ class Listpagestate extends State<Listpages> {
           ),
         ),
 
+    ),
     );
+  }
+
+  AppBar appbars() {
+    return AppBar( 
+      toolbarHeight: 80,
+          backgroundColor: Colors.transparent,
+          flexibleSpace: Stack(
+             fit: StackFit.expand,
+             children: [
+              Image(
+                image: AssetImage("assets/images/CardTemplate.png"),
+                fit: BoxFit.cover,
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                  'Job List',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                )
+              )
+             ],
+          ),
+        );
   }
   Widget _buildEmptyState(String message) {
   return Center(

@@ -17,23 +17,23 @@ class Mycardstate extends State<Mycard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.only(top: 20,left: 20,right: 20),
       color: const Color.fromARGB(255, 245, 245, 245),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8), 
+                  borderRadius: BorderRadius.circular(10), 
                   child: Image.asset(
-                    'assets/SCB LOGO.png', 
+                    'assets/images/SCB LOGO.png', 
                     width: 40,
-                    height: 40,
+                    height: 60,
                     fit: BoxFit.cover, 
                   ),
                 ),
@@ -57,6 +57,8 @@ class Mycardstate extends State<Mycard> {
               ],
             ),
             IconButton(
+              padding: EdgeInsets.only(bottom: 30),
+              iconSize: 30,
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 color: isFavorite ? Colors.red : Colors.grey,
@@ -76,15 +78,15 @@ class Mycardstate extends State<Mycard> {
 
   Widget _buildTag(String label, Color color) {
     return Container(
-      margin: EdgeInsets.only(top: 8,right: 8),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: EdgeInsets.only(top: 5,right: 5),
+      padding: EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(13),
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 12, color: Colors.white),
+        style: TextStyle(fontSize: 10, color: Colors.white),
       ),
     );
   }
