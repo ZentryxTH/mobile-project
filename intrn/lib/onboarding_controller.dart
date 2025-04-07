@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intrn/pages/login_page.dart';
 
 class OnboardingController extends GetxController{
   static OnboardingController get Instance => Get.find();
@@ -16,7 +17,7 @@ class OnboardingController extends GetxController{
 
   void nextPage() {
     if(currentPageIndex.value == 2){
-      // Get.to(LoginPage());
+      Get.to(LoginPage());
     } else{
       int page = currentPageIndex.value + 1;
       pageController.jumpToPage(page);
@@ -24,7 +25,7 @@ class OnboardingController extends GetxController{
   }
 
   void skipPage() {
-    // Get.to(LoginPage());
+    Get.to(LoginPage());
   }
   
 }

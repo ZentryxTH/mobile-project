@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:intrn/pages/home_page.dart';
+import 'package:intrn/pages/home_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
   void _login() {
     if (emailController.text == "admin" && passwordController.text == "1234") {
-        // Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
+       
         setState(() {
           errorMessage = null;
         }
@@ -38,9 +38,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       setState(() {
         errorMessage = "Invalid email or password";
       });
-    }
-    emailController.clear();
-    passwordController.clear();
+    } 
+    
+    Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
+
   }
 
   void wrongInput(){

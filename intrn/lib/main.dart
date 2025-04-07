@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/home_page.dart';
-import 'package:intrn/pages/login_page.dart';
 import 'package:intrn/pages/onboarding_page.dart';
+import 'package:get/get.dart';
 
 
 void main() {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: OnboardingPage(),
     );
   }
