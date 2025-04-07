@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:intrn/simulate/Inprogess_card_detail.dart';
+import 'package:intrn/simulate/Applied_card_detail.dart';
+import 'package:intrn/simulate/favourite_card_detail.dart';
 
 class Mycard extends StatefulWidget {
   final String jobTitle;
@@ -27,8 +29,20 @@ class Mycardstate extends State<Mycard> {
       color: const Color.fromARGB(255, 245, 245, 245),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => 
+              widget.isInProgress
+              ? Inprogess()
+              :widget.isApplied
+              ? Applieds()
+              : favourite()),
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
@@ -108,6 +122,8 @@ class Mycardstate extends State<Mycard> {
                 ),
               
           ],
+          ),
+          
         ),
       ),
     );
