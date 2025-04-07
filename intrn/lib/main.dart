@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/pages/home_page.dart';
 import 'package:intrn/pages/login_page.dart';
 import 'package:intrn/pages/onboarding_page.dart';
 
@@ -18,4 +19,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
