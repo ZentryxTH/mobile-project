@@ -38,7 +38,7 @@ class Mycardstate extends State<Mycard> {
               ? Inprogess()
               :widget.isApplied
               ? Applieds()
-              : favourite()),
+              : Favourite()),
             );
           },
           child: Row(
