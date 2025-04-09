@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intrn/pages/onboarding_page.dart';
 import 'package:get/get.dart';
 
-
-void main() {
+void main() async{
   runApp(const MyApp());
 }
 
