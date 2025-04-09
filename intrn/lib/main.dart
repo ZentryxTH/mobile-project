@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/finish_signup.dart';
 import 'package:intrn/pages/signup_page.dart';
 
-void main() {
+void main() async{
   runApp(const MyApp());
 }
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FinishSignup(),
+      home: SignupPage(),
     );
   }
 }
