@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/first_letter_uppercase.dart';
+import 'package:intrn/data/services/first_letter_uppercase.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:intrn/pages/add_resume_page.dart';

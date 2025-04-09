@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/recent_job_list.dart';
+import 'package:intrn/data/repositories/recent_job_list.dart';
 
 class RecentJob extends StatefulWidget {
   final RecentJobList job;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:intrn/onboarding_controller.dart';
+import 'package:intrn/controllers/onboarding_controller.dart';
 import 'package:get/get.dart';
 
 class OnboardingPage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/job_card_list.dart';
+import 'package:intrn/data/repositories/job_card_list.dart';
 
 class JobCard extends StatefulWidget {
   final JobCardList job;

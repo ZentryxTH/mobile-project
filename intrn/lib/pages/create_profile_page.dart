@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:intrn/pages/add_education_page.dart';
-import 'package:intrn/phone_format.dart';
-import 'package:intrn/first_letter_uppercase.dart';
+import 'package:intrn/data/services/phone_format.dart';
+import 'package:intrn/data/services/first_letter_uppercase.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 

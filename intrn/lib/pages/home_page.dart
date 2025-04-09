@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/category_filter.dart';
-import 'package:intrn/job_card_list.dart';
-import 'package:intrn/job_card.dart';
-import 'package:intrn/recent_job.dart';
-import 'package:intrn/recent_job_list.dart';
+import 'package:intrn/widgets/category_filter.dart';
+import 'package:intrn/data/repositories/job_card_list.dart';
+import 'package:intrn/widgets/job_card.dart';
+import 'package:intrn/widgets/recent_job.dart';
+import 'package:intrn/data/repositories/recent_job_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
