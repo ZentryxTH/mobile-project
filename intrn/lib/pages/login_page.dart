@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/pages/home_page.dart';
+import 'package:intrn/pages/signup_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -153,10 +154,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                             SizedBox(width: 4),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => SignupPage()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignupPage()),
+                                );
                               },
                               child: Text(
                                 "Sign up",
