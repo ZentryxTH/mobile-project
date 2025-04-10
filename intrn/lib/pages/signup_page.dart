@@ -7,8 +7,9 @@ PageRouteBuilder _fadeRoute(Widget page) {
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
-          opacity: animation,
-          child: child); // Directly return the new page with no animation
+        opacity: animation,
+        child: child,
+      );
     },
   );
 }
@@ -21,47 +22,19 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  bool isObscure = true;
-  String? errorMessage;
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool isPasswordObscure = true;
+  bool isConfirmPasswordObscure = true;
 
   void _signup() {
-
-    String email = emailController.text.trim();
-    String password = passwordController.text;
-    String confirmPassword = confirmPasswordController.text;
-
-    
-
-    setState(() {
-      errorMessage = null;
-    });
-
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-      setState(() {
-        errorMessage = "Invalid email format";
-      });
-      return;
+    if (formKey.currentState!.validate()) {
+      Navigator.of(context).pushReplacement(_fadeRoute(const CreateProfilePage()));
     }
-
-    if (password.length < 8) {
-      setState(() {
-        errorMessage = "Password must be at least 8 characters";
-      });
-      return;
-    }
-
-    if (password != confirmPassword) {
-      setState(() {
-        errorMessage = "Passwords do not match";
-      });
-      return;
-    }
-
-    Navigator.of(context).pushReplacement(_fadeRoute(CreateProfilePage()));
   }
 
   @override
@@ -69,23 +42,26 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 179, 117),
-          ),
+          decoration: const BoxDecoration(color: Color.fromARGB(255, 255, 179, 117)),
           width: double.infinity,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 80,),
+              const SizedBox(height: 80),
               Container(
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.8),
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
                 child: Container(
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft:Radius.circular(40), topRight: Radius.circular(40)),
-                    color: Colors.white,                  
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                    ),
+                    color: Colors.white,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -93,71 +69,64 @@ class _SignupPageState extends State<SignupPage> {
                           width: 64,
                           height: 64,
                           clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(16)),
                           ),
-                          child: Image(image: AssetImage("assets/images/Intrnip.png"))
-                        ),
-                        SizedBox(height: 16,),
-                        Text("Welcome to Intrn", style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontSize: 24,
+                          child: const Image(
+                            image: AssetImage("assets/images/Intrnip.png"),
                           ),
                         ),
-                        Text("Create your account", style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontSize: 24,
-                          ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Welcome to Intrn",
+                          style: TextStyle(fontFamily: "Poppins", fontSize: 24),
                         ),
-                        SizedBox(height: 8,),
-                        Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  emailBox(),
-                                  SizedBox(height: 24,),
-                                  passwordBox(),
-                                  SizedBox(height: 24,),
-                                  confirmPasswordBox(),
-                                  if (errorMessage != null)
-                                    Text(
-                                      errorMessage!,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontFamily: "Poppins",
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  SizedBox(height: 16,),
-                                  signupButton(),
-                                  SizedBox(height: 10,),
-                                ],
+                        const Text(
+                          "Create your account",
+                          style: TextStyle(fontFamily: "Poppins", fontSize: 24),
+                        ),
+                        const SizedBox(height: 8),
+                        Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    emailBox(),
+                                    const SizedBox(height: 24),
+                                    passwordBox(),
+                                    const SizedBox(height: 24),
+                                    confirmPasswordBox(),
+                                    const SizedBox(height: 16),
+                                    signupButton(),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 6,),
+                        const SizedBox(height: 6),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Have an account?",
-                              style: TextStyle(
-                                fontFamily: "Poppins",
-                                fontSize: 12,
-                              ),
+                              style: TextStyle(fontFamily: "Poppins", fontSize: 12),
                             ),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => LoginPage()),
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 "Sign in",
                                 style: TextStyle(
                                   fontFamily: "Poppins",
@@ -169,16 +138,16 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 24,),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(48, 0, 48, 0),
+                        const SizedBox(height: 24),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 48),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Divider(
-                                  color: Colors.black, // Line color
-                                  thickness: 1, // Line thickness
-                                  endIndent: 8, // Space between line and text
+                                  color: Colors.black,
+                                  thickness: 1,
+                                  endIndent: 8,
                                 ),
                               ),
                               Text(
@@ -192,15 +161,15 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                               Expanded(
                                 child: Divider(
-                                  color: Colors.black, // Line color
-                                  thickness: 1, // Line thickness
-                                  indent: 8, // Space between line and text
+                                  color: Colors.black,
+                                  thickness: 1,
+                                  indent: 8,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -209,91 +178,79 @@ class _SignupPageState extends State<SignupPage> {
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
-  TextField emailBox() {
-    return TextField(
+  TextFormField emailBox() {
+    return TextFormField(
       controller: emailController,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239),
-        hintText: "Email",
-        hintStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        )
-      ),
+      keyboardType: TextInputType.emailAddress,
+      decoration: inputDecoration("Email"),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+          return 'Invalid email format';
+        }
+        return null;
+      },
     );
   }
 
-  TextField passwordBox() {
-    return TextField(
+  TextFormField passwordBox() {
+    return TextFormField(
       controller: passwordController,
-      obscureText: isObscure,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239),
-        hintText: "Password",
-        hintStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
-        ),
-        suffixIcon: GestureDetector( 
-          onTap: () {
-            setState(() {
-              isObscure = !isObscure; 
-            });
-          },
-          child: Icon(
-            isObscure ? Icons.visibility_off : Icons.visibility,
+      obscureText: isPasswordObscure,
+      decoration: inputDecoration("Password").copyWith(
+        suffixIcon: IconButton(
+          icon: Icon(
+            isPasswordObscure ? Icons.visibility_off : Icons.visibility,
             color: Colors.grey,
           ),
+          onPressed: () {
+            setState(() {
+              isPasswordObscure = !isPasswordObscure;
+            });
+          },
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        )
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password';
+        } else if (value.length < 8) {
+          return 'Password must be at least 8 characters';
+        }
+        return null;
+      },
     );
   }
 
-  TextField confirmPasswordBox() {
-    return TextField(
+  TextFormField confirmPasswordBox() {
+    return TextFormField(
       controller: confirmPasswordController,
-      obscureText: isObscure,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239),
-        hintText: "Confirm Password",
-        hintStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
-        ),
-        suffixIcon: GestureDetector( 
-          onTap: () {
-            setState(() {
-              isObscure = !isObscure; 
-            });
-          },
-          child: Icon(
-            isObscure ? Icons.visibility_off : Icons.visibility,
+      obscureText: isConfirmPasswordObscure,
+      decoration: inputDecoration("Confirm Password").copyWith(
+        suffixIcon: IconButton(
+          icon: Icon(
+            isConfirmPasswordObscure ? Icons.visibility_off : Icons.visibility,
             color: Colors.grey,
           ),
+          onPressed: () {
+            setState(() {
+              isConfirmPasswordObscure = !isConfirmPasswordObscure;
+            });
+          },
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        )
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please confirm your password';
+        } else if (value != passwordController.text) {
+          return 'Passwords do not match';
+        }
+        return null;
+      },
     );
   }
 
@@ -305,10 +262,13 @@ class _SignupPageState extends State<SignupPage> {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Color.fromARGB(255, 255, 122, 39), width: 2),
+          border: Border.all(
+            color: const Color.fromARGB(255, 255, 122, 39),
+            width: 2,
+          ),
         ),
         alignment: Alignment.center,
-        child: Text(
+        child: const Text(
           "Sign up",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 122, 39),
@@ -318,5 +278,18 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
-}
 
+  InputDecoration inputDecoration(String hint) {
+    return InputDecoration(
+      filled: true,
+      fillColor: const Color.fromARGB(255, 239, 239, 239),
+      hintText: hint,
+      hintStyle: const TextStyle(fontFamily: "Poppins", fontSize: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24),
+        borderSide: BorderSide.none,
+      ),
+    );
+  }
+}
