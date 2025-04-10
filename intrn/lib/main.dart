@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/pages/onboarding_page.dart';
 import 'package:get/get.dart';
-import 'package:intrn/pages/login_page.dart';
-import 'package:intrn/pages/signup_page.dart';
+import 'package:intrn/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then(
+    (FirebaseApp value) => Get.put(AuthenticationRepository())
+  );
+
   runApp(const MyApp());
 }
 

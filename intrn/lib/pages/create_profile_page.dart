@@ -33,7 +33,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   File? _image;
-  String? errorMessage;
+  final formKey = GlobalKey<FormState>();
 
   Future<void> _showPickerDialog(BuildContext context) async {
     showModalBottomSheet(
@@ -92,23 +92,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   }
 
   void _next() {
-    setState(() {
-      errorMessage = null;
-    });
-
-    if (firstnameController.text.isEmpty ||
-        lastnameController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        countryController.text.isEmpty ||
-        selectedDate == null
-        ) {
-      setState(() {
-        errorMessage = "Please complete all fields";
-      });
-      return;
+    if (formKey.currentState!.validate()){
+      Navigator.of(context).pushReplacement(_fadeRoute(AddEducationPage()));
     }
-
-    Navigator.of(context).pushReplacement(_fadeRoute(AddEducationPage()));
   }
 
   @override
@@ -133,49 +119,44 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Create your profile",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontSize: 24,
-                          )
-                        ),
-                        SizedBox(height: 24,),
-                        firstNameInput(),
-                        SizedBox(height: 16,),
-                        lastNameInput(),
-                        SizedBox(height: 16,),
-                        birthDateInput(),
-                        SizedBox(height: 16,),
-                        phoneInput(),
-                        SizedBox(height: 16,),
-                        countryInput(),
-                        SizedBox(height: 8,),
-                        if (errorMessage != null) ...[
-                          SizedBox(height: 8),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            errorMessage!,
-                            style: TextStyle(color: Colors.red),
+                            "Create your profile",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              fontSize: 24,
+                            )
                           ),
+                          SizedBox(height: 24,),
+                          firstNameInput(),
+                          SizedBox(height: 16,),
+                          lastNameInput(),
+                          SizedBox(height: 16,),
+                          birthDateInput(),
+                          SizedBox(height: 16,),
+                          phoneInput(),
+                          SizedBox(height: 16,),
+                          countryInput(),
+                          SizedBox(height: 16,),
+                          Center(
+                            child: profilePicturePicker(),
+                          ),
+                          SizedBox(height: 16),
+                          nextButton()
                         ],
-                        SizedBox(height: 8,),
-                        Center(
-                          child: profilePicturePicker(),
-                        ),
-                        SizedBox(height: 16),
-                        nextButton()
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-        ),
-      )
+        )
+      ),
     );
   }
 
@@ -221,44 +202,52 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   );
   }
 
-  TextField countryInput() {
-    return TextField(
+  TextFormField countryInput() {
+    return TextFormField(
       controller: countryController,
       decoration:  inputDecoration("Country"),
       inputFormatters: [
         FirstLetterUpperCase(),
       ],
+      validator: (value) =>
+        value!.isEmpty ? "Country is required" : null,
     );
   }
 
-  TextField lastNameInput() {
-    return TextField(
+  TextFormField lastNameInput() {
+    return TextFormField(
       controller: lastnameController,
       decoration: inputDecoration("Lastname"),
       inputFormatters: [
         FirstLetterUpperCase(),
       ],
+      validator: (value) =>
+        value!.isEmpty ? "Last name is required" : null,
     );
   }
 
-  TextField firstNameInput() {
-    return TextField(
+  TextFormField firstNameInput() {
+    return TextFormField(
       controller: firstnameController,
       decoration: inputDecoration("Firstname"),
       inputFormatters: [
         FirstLetterUpperCase(),
       ],
+      validator: (value) =>
+        value!.isEmpty ? "First name is required" : null,
     );
   }
 
-  TextField phoneInput() {
-    return TextField(
+  TextFormField phoneInput() {
+    return TextFormField(
       controller: phoneController,
       decoration: inputDecoration("Phone"),
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         PhoneFormat(),
       ],
+      validator: (value) =>
+        value!.isEmpty ? "Phone is required" : null,
     );
   }
 
@@ -266,7 +255,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     return GestureDetector(
       onTap: () => _selectDate(context),
       child: AbsorbPointer(
-        child: TextField(
+        child: TextFormField(
           decoration: InputDecoration(
             filled: true,
             fillColor: Color.fromARGB(255, 239, 239, 239),
@@ -284,6 +273,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 ? ''
                 : DateFormat('dd/MM/yyyy').format(selectedDate!),
           ),
+          validator: (value) =>
+            value!.isEmpty ? "First name is required" : null,
         ),
       ),
     );

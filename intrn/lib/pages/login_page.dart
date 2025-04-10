@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/pages/home_page.dart';
 import 'package:intrn/pages/signup_page.dart';
+import 'package:intrn/firebase_options.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -24,14 +26,20 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   bool isObscure = true;
 
-  void _login() {
+  void _login() async {
     if (_formKey.currentState!.validate()) {
-      if (emailController.text == "admin@hotmail.admin" &&
-          passwordController.text == "admin1234") {
+      try {
+        await AuthenticationRepository.instance.loginWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        // If login is successful
         Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
-      } else {
+      } catch (e) {
+        // If login fails
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Incorrect email or password')),
+          SnackBar(content: Text(e.toString())),
         );
       }
     }

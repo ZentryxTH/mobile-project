@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/pages/create_profile_page.dart';
 import 'package:intrn/pages/login_page.dart';
+import 'package:intrn/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
+
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -31,9 +35,20 @@ class _SignupPageState extends State<SignupPage> {
   bool isPasswordObscure = true;
   bool isConfirmPasswordObscure = true;
 
-  void _signup() {
+  void _signup() async {
     if (formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacement(_fadeRoute(const CreateProfilePage()));
+      try {
+        await AuthenticationRepository.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        Navigator.of(context).pushReplacement(_fadeRoute(const CreateProfilePage()));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signup failed: ${e.toString()}')),
+        );
+      }
     }
   }
 
