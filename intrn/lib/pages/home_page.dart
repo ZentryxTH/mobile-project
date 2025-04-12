@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 import 'package:intrn/widgets/category_filter.dart';
-import 'package:intrn/data/repositories/job_card_list.dart';
+import 'package:intrn/models/job_card_list.dart';
 import 'package:intrn/widgets/job_card.dart';
 import 'package:intrn/widgets/recent_job.dart';
-import 'package:intrn/data/repositories/recent_job_list.dart';
+import 'package:intrn/models/recent_job_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,7 +74,8 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return RecentJob(job: recentJobs[index]); // Updated to use RecentJob
               },
-            )
+            ),
+            TextButton(onPressed: AuthenticationRepository.instance.logout, child: Text("Sign out")),
           ],
         )
       ),

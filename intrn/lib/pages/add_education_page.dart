@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/data/services/first_letter_uppercase.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intrn/models/education_model.dart';
+import 'package:intrn/data/repositories/eduction_repository.dart';
 import 'package:intrn/pages/add_resume_page.dart';
-
-PageRouteBuilder _fadeRoute(Widget page) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(
-          opacity: animation,
-          child: child); // Directly return the new page with no animation
-    },
-  );
-}
+import 'package:intrn/data/services/first_letter_uppercase.dart';
 
 class AddEducationPage extends StatefulWidget {
   const AddEducationPage({super.key});
@@ -22,269 +13,82 @@ class AddEducationPage extends StatefulWidget {
   State<AddEducationPage> createState() => _AddEducationPageState();
 }
 
-enum Degree {
-  bachelor,
-  master,
-  doctorate,
-  diploma,
-  associate,
-  other,
-}
+enum Degree { bachelor, master, doctorate, diploma, associate, other }
 
 class _AddEducationPageState extends State<AddEducationPage> {
+  final _instructorController = TextEditingController();
+  final _facultyController = TextEditingController();
+  final _educationRepo = EducationRepository();
 
-  final TextEditingController instructorController = TextEditingController();
-  final TextEditingController facultyController = TextEditingController();
-  Degree? selectedDegree;
-  DateTime? startDate;
-  DateTime? endDate;
-
-  Future<void> pickStartDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        startDate = picked;
-      });
-    }
-  }
-
-  Future<void> pickEndDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
-    );
-    if (picked != null) {
-      setState(() {
-        endDate = picked;
-      });
-    }
-  }
-
-  void _next() {
-    Navigator.of(context).pushReplacement(_fadeRoute(AddResumePage()));
-  }
+  Degree? _selectedDegree;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 179, 117),
-          ),
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 80,),
-              Container(
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.8),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft:Radius.circular(40), topRight: Radius.circular(40)),
-                    color: Colors.white,                  
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Add Your Education",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontSize: 24,
-                          )
-                        ),
-                        SizedBox(height: 24,),
-                        instructorInput(),
-                        SizedBox(height: 16,),
-                        facultyInput(),
-                        SizedBox(height: 16,),
-                        degreeInput(),
-                        SizedBox(height: 16,),
-                        startDateInput(),
-                        SizedBox(height: 16,),
-                        endDateInput(),
-                        SizedBox(height: 24,),
-                        nextButton(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      )
-    );
+  void dispose() {
+    _instructorController.dispose();
+    _facultyController.dispose();
+    super.dispose();
   }
 
-  Widget nextButton() {
-    return GestureDetector(
-      onTap: _next,
-      child: Container(
-        width: double.infinity,
-        height: 48,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Color.fromARGB(255, 255, 122, 39), width: 2),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          "Next",
-          style: TextStyle(
-            color: Color.fromARGB(255, 255, 122, 39),
-            fontSize: 18,
-          ),
-        ),
-      ),
+  Future<void> _pickDate({
+    required ValueChanged<DateTime?> onPicked,
+    required DateTime firstDate,
+    DateTime? initialDate,
+  }) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate ?? DateTime.now(),
+      firstDate: firstDate,
+      lastDate: DateTime(2100),
     );
+    onPicked(pickedDate);
   }
 
-  GestureDetector endDateInput() {
-    return GestureDetector(
-      onTap: pickEndDate,
-      child: AbsorbPointer(
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: "End Date",
-            filled: true,
-            fillColor: Color.fromARGB(255, 239, 239, 239),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          ),
-          controller: TextEditingController(
-            text: endDate == null
-                ? ""
-                : DateFormat('dd/MM/yyyy').format(endDate!),
-          ),
-        ),
-      ),
+  Future<void> _submitEducation() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      _showMessage('User not logged in');
+      return;
+    }
+
+    if (_instructorController.text.isEmpty ||
+        _facultyController.text.isEmpty ||
+        _selectedDegree == null ||
+        _startDate == null ||
+        _endDate == null) {
+      _showMessage('Please fill in all fields');
+      return;
+    }
+
+    final education = EducationModel(
+      instructor: _instructorController.text.trim(),
+      faculty: _facultyController.text.trim(),
+      degree: _degreeToString(_selectedDegree),
+      startDate: _startDate!.toIso8601String(),
+      endDate: _endDate!.toIso8601String(),
     );
+
+    try {
+      await _educationRepo.createEducation(education);
+      _showMessage('Education saved successfully');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AddResumePage()),
+      );
+    } catch (e) {
+      _showMessage('Failed to save: $e');
+    }
   }
 
-  GestureDetector startDateInput() {
-    return GestureDetector(
-      onTap: pickStartDate,
-      child: AbsorbPointer(
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: "Start Date",
-            filled: true,
-            fillColor: Color.fromARGB(255, 239, 239, 239),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          ),
-          controller: TextEditingController(
-            text: startDate == null
-                ? ""
-                : DateFormat('dd/MM/yyyy').format(startDate!),
-          ),
-        ),
-      ),
-    );
-  }
- 
-
-  DropdownButtonFormField degreeInput() {
-    return DropdownButtonFormField<Degree>(
-      value: selectedDegree,
-      decoration: InputDecoration(
-        labelText: "Degree",
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      ),
-      items: Degree.values.map((degree) {
-        return DropdownMenuItem<Degree>(
-          value: degree,
-          child: Text(
-            degree.name[0].toUpperCase() + degree.name.substring(1), // Capitalize
-            style: TextStyle(fontFamily: "Poppins"),
-          ),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          selectedDegree = value;
-        });
-      },
-    );
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  TextField facultyInput() {
-    return TextField(
-      controller: facultyController,
-      decoration: InputDecoration(
-        labelText: "Faculty",
-        labelStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
-          color: Colors.black,
-        ),
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239), // Light gray background
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30), // Fully rounded corners
-          borderSide: BorderSide.none, // No border line
-        ),
-      ),
-      style: TextStyle(
-        fontFamily: "Poppins",
-        fontSize: 16,
-        color: Colors.black,
-      ),
-    );
-  }
-
-  TextField instructorInput() {
-    return TextField(
-      controller: instructorController,
-      decoration: InputDecoration(
-        labelText: "Instructor",
-        labelStyle: TextStyle(
-          fontFamily: "Poppins",
-          fontSize: 16,
-          color: Colors.black,
-        ),
-        filled: true,
-        fillColor: Color.fromARGB(255, 239, 239, 239), // Light gray background
-        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30), // Fully rounded corners
-          borderSide: BorderSide.none, // No border line
-        ),
-      ),
-      style: TextStyle(
-        fontFamily: "Poppins",
-        fontSize: 16,
-        color: Colors.black,
-      ),
-    );
-  }
-
-  String? getDegreeString() {
-    if (selectedDegree == null) return null;
-    switch (selectedDegree!) {
+  String _degreeToString(Degree? degree) {
+    switch (degree) {
       case Degree.bachelor:
         return "Bachelor's";
       case Degree.master:
@@ -296,8 +100,154 @@ class _AddEducationPageState extends State<AddEducationPage> {
       case Degree.associate:
         return "Associate";
       case Degree.other:
+      default:
         return "Other";
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFB375),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 80),
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Add Your Education",
+                    style: TextStyle(fontFamily: "Poppins", fontSize: 24),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildTextField(_instructorController, 'Instructor'),
+                  const SizedBox(height: 16),
+                  _buildTextField(_facultyController, 'Faculty'),
+                  const SizedBox(height: 16),
+                  _buildDegreeDropdown(),
+                  const SizedBox(height: 16),
+                  _buildDatePicker("Start Date", _startDate, () {
+                    _pickDate(
+                      onPicked: (date) => setState(() => _startDate = date),
+                      firstDate: DateTime(1950),
+                    );
+                  }),
+                  const SizedBox(height: 16),
+                  _buildDatePicker("End Date", _endDate, () {
+                    _pickDate(
+                      onPicked: (date) => setState(() => _endDate = date),
+                      firstDate: _startDate ?? DateTime(1950),
+                    );
+                  }),
+                  const SizedBox(height: 24),
+                  _buildNextButton(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: const Color(0xFFEFEFEF),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
+      ),
+      inputFormatters: [FirstLetterUpperCase()],
+    );
+  }
+
+  Widget _buildDegreeDropdown() {
+    return DropdownButtonFormField<Degree>(
+      value: _selectedDegree,
+      decoration: InputDecoration(
+        labelText: "Degree",
+        filled: true,
+        fillColor: const Color(0xFFEFEFEF),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
+      ),
+      items:
+          Degree.values.map((degree) {
+            return DropdownMenuItem(
+              value: degree,
+              child: Text(
+                degree.name[0].toUpperCase() + degree.name.substring(1),
+              ),
+            );
+          }).toList(),
+      onChanged: (degree) => setState(() => _selectedDegree = degree),
+    );
+  }
+
+  Widget _buildDatePicker(String label, DateTime? date, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AbsorbPointer(
+        child: TextField(
+          controller: TextEditingController(
+            text: date == null ? "" : DateFormat('dd/MM/yyyy').format(date),
+          ),
+          decoration: InputDecoration(
+            labelText: label,
+            filled: true,
+            fillColor: const Color(0xFFEFEFEF),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return GestureDetector(
+      onTap: _submitEducation,
+      child: Container(
+        width: double.infinity,
+        height: 48,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFFFF7A27), width: 2),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          "Next",
+          style: TextStyle(color: Color(0xFFFF7A27), fontSize: 18),
+        ),
+      ),
+    );
+  }
 }
