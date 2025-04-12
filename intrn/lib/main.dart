@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/pages/create_profile_page.dart';
 import 'package:intrn/pages/onboarding_page.dart';
 import 'package:get/get.dart';
 import 'package:intrn/firebase_options.dart';
@@ -21,6 +22,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(home: OnboardingPage());
+    return GetMaterialApp(home: CreateProfilePage());
   }
 }

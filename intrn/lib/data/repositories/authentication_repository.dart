@@ -49,9 +49,20 @@ class AuthenticationRepository extends GetxController {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      _showFirebaseError(e);
-    } catch (e) {
-      Get.snackbar("Error", "An unknown error occurred.");
+      throw Exception(_getErrorMessage(e));
+    }
+  }
+
+  String _getErrorMessage(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No user found for that email.';
+      case 'wrong-password':
+        return 'Wrong password provided.';
+      case 'invalid-email':
+        return 'Invalid email address.';
+      default:
+        return 'Login failed. Please try again.';
     }
   }
 

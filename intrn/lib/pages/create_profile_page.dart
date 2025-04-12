@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:intrn/pages/add_education_page.dart';
-import 'package:intrn/data/services/phone_format.dart';
 import 'package:intrn/data/services/first_letter_uppercase.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:intrn/models/user_model.dart';
+import 'package:intrn/data/repositories/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return FadeTransition(
-          opacity: animation,
-          child: child); // Directly return the new page with no animation
+        opacity: animation,
+        child: child,
+      ); // Directly return the new page with no animation
     },
   );
 }
@@ -26,14 +29,14 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
-
-  final TextEditingController firstnameController = TextEditingController();
-  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   DateTime? selectedDate;
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   File? _image;
   final formKey = GlobalKey<FormState>();
+  final _repo = UserRepository();
 
   Future<void> _showPickerDialog(BuildContext context) async {
     showModalBottomSheet(
@@ -91,8 +94,47 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     }
   }
 
+  // Save User data
+  Future<void> _saveProfile() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        final user = FirebaseAuth.instance.currentUser!;
+        String imageUrl = '';
+
+        if (_image != null) {
+          imageUrl = await _repo.uploadImage(_image!);
+        }
+
+        final userModel = UserModel(
+          firstName: firstNameController.text.trim(),
+          lastName: lastNameController.text.trim(),
+          email: user.email ?? '',
+          phone: phoneController.text.trim(),
+          birthDate: selectedDate?.toIso8601String() ?? "",
+          country: countryController.text.trim(),
+          imageUrl: imageUrl,
+        );
+
+        await _repo.createUser(userModel);
+        
+        if (mounted){
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Profile saved!")));
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Error: $e")));
+        }
+      }
+    }
+  }
+
   void _next() {
-    if (formKey.currentState!.validate()){
+    if (formKey.currentState!.validate()) {
+      _saveProfile();
       Navigator.of(context).pushReplacement(_fadeRoute(AddEducationPage()));
     }
   }
@@ -102,20 +144,23 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 179, 117),
-          ),
+          decoration: BoxDecoration(color: Color.fromARGB(255, 255, 179, 117)),
           width: double.infinity,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 80,),
+              SizedBox(height: 80),
               Container(
-                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.8),
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft:Radius.circular(40), topRight: Radius.circular(40)),
-                    color: Colors.white,                  
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                    ),
+                    color: Colors.white,
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(32),
@@ -129,24 +174,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             style: TextStyle(
                               fontFamily: "Poppins",
                               fontSize: 24,
-                            )
+                            ),
                           ),
-                          SizedBox(height: 24,),
+                          SizedBox(height: 24),
                           firstNameInput(),
-                          SizedBox(height: 16,),
-                          lastNameInput(),
-                          SizedBox(height: 16,),
-                          birthDateInput(),
-                          SizedBox(height: 16,),
-                          phoneInput(),
-                          SizedBox(height: 16,),
-                          countryInput(),
-                          SizedBox(height: 16,),
-                          Center(
-                            child: profilePicturePicker(),
-                          ),
                           SizedBox(height: 16),
-                          nextButton()
+                          lastNameInput(),
+                          SizedBox(height: 16),
+                          birthDateInput(),
+                          SizedBox(height: 16),
+                          phoneInput(),
+                          SizedBox(height: 16),
+                          countryInput(),
+                          SizedBox(height: 16),
+                          Center(child: profilePicturePicker()),
+                          SizedBox(height: 16),
+                          nextButton(),
                         ],
                       ),
                     ),
@@ -155,7 +198,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               ),
             ],
           ),
-        )
+        ),
       ),
     );
   }
@@ -168,7 +211,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Color.fromARGB(255, 255, 122, 39), width: 2),
+          border: Border.all(
+            color: Color.fromARGB(255, 255, 122, 39),
+            width: 2,
+          ),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -184,57 +230,53 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   Widget profilePicturePicker() {
     return Column(
-    children: [
-      GestureDetector(
-        onTap: () => _showPickerDialog(context),
-        child: CircleAvatar(
-          radius: 50,
-          backgroundColor: Colors.grey,
-          backgroundImage: _image != null ? FileImage(_image!) : null,
-          child: _image == null
-              ? Icon(Icons.add_photo_alternate, size: 40, color: Colors.white)
-              : null,
+      children: [
+        GestureDetector(
+          onTap: () => _showPickerDialog(context),
+          child: CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey,
+            backgroundImage: _image != null ? FileImage(_image!) : null,
+            child:
+                _image == null
+                    ? Icon(
+                      Icons.add_photo_alternate,
+                      size: 40,
+                      color: Colors.white,
+                    )
+                    : null,
+          ),
         ),
-      ),
-      SizedBox(height: 8),
-      Text("Choose your profile picture", style: TextStyle(fontSize: 14)),
-    ],
-  );
+        SizedBox(height: 8),
+        Text("Choose your profile picture", style: TextStyle(fontSize: 14)),
+      ],
+    );
   }
 
   TextFormField countryInput() {
     return TextFormField(
       controller: countryController,
-      decoration:  inputDecoration("Country"),
-      inputFormatters: [
-        FirstLetterUpperCase(),
-      ],
-      validator: (value) =>
-        value!.isEmpty ? "Country is required" : null,
+      decoration: inputDecoration("Country"),
+      inputFormatters: [FirstLetterUpperCase()],
+      validator: (value) => value!.isEmpty ? "Country is required" : null,
     );
   }
 
   TextFormField lastNameInput() {
     return TextFormField(
-      controller: lastnameController,
+      controller: lastNameController,
       decoration: inputDecoration("Lastname"),
-      inputFormatters: [
-        FirstLetterUpperCase(),
-      ],
-      validator: (value) =>
-        value!.isEmpty ? "Last name is required" : null,
+      inputFormatters: [FirstLetterUpperCase()],
+      validator: (value) => value!.isEmpty ? "Last name is required" : null,
     );
   }
 
   TextFormField firstNameInput() {
     return TextFormField(
-      controller: firstnameController,
+      controller: firstNameController,
       decoration: inputDecoration("Firstname"),
-      inputFormatters: [
-        FirstLetterUpperCase(),
-      ],
-      validator: (value) =>
-        value!.isEmpty ? "First name is required" : null,
+      inputFormatters: [FirstLetterUpperCase()],
+      validator: (value) => value!.isEmpty ? "First name is required" : null,
     );
   }
 
@@ -242,16 +284,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     return TextFormField(
       controller: phoneController,
       decoration: inputDecoration("Phone"),
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        PhoneFormat(),
-      ],
-      validator: (value) =>
-        value!.isEmpty ? "Phone is required" : null,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      validator: (value) => value!.isEmpty ? "Phone is required" : null,
     );
   }
 
-   Widget birthDateInput() {
+  Widget birthDateInput() {
     return GestureDetector(
       onTap: () => _selectDate(context),
       child: AbsorbPointer(
@@ -269,12 +307,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             suffixIcon: Icon(Icons.calendar_today),
           ),
           controller: TextEditingController(
-            text: selectedDate == null
-                ? ''
-                : DateFormat('dd/MM/yyyy').format(selectedDate!),
+            text:
+                selectedDate == null
+                    ? ''
+                    : DateFormat('dd/MM/yyyy').format(selectedDate!),
           ),
-          validator: (value) =>
-            value!.isEmpty ? "First name is required" : null,
+          validator:
+              (value) => value!.isEmpty ? "First name is required" : null,
         ),
       ),
     );

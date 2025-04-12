@@ -34,10 +34,9 @@ class _LoginPageState extends State<LoginPage> {
           password: passwordController.text.trim(),
         );
 
-        // If login is successful
-        Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
+        // Navigate on success
+        Navigator.of(context).pushReplacement(_fadeRoute(const HomePage()));
       } catch (e) {
-        // If login fails
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),
         );
