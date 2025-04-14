@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intrn/pages/forgot_password_page/forgot_password_page.dart';
 
-class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({super.key});
-
-  @override
-  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+PageRouteBuilder _fadeRoute(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(opacity: animation, child: child);
+    },
+  );
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
 
+  @override
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+}
+
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController currentPasswordController =
+      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void _send() {
+  bool isObscure = true;
 
+  void _send() {
+    
   }
 
   @override
@@ -29,7 +43,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
         title: Text(
-          "Forgot Password",
+          "Change Password",
           style: TextStyle(fontFamily: "Poppins", fontSize: 24),
         ),
       ),
@@ -40,13 +54,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 24),
               Text(
                 "Enter Email Address",
                 style: TextStyle(fontFamily: "Poppins", fontSize: 16),
               ),
-              SizedBox(height: 6),
+              SizedBox(height: 8),
               emailBox(),
-              SizedBox(height: 32,),
+              SizedBox(height: 16,),
+              Text(
+                "Current Password",
+                style: TextStyle(fontFamily: "Poppins", fontSize: 16),
+              ),
+              SizedBox(height: 8,),
+              currentPassword(),
+              SizedBox(height: 12,),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(_fadeRoute(ForgotPasswordPage()));
+                }, 
+                child: Text("Forgot Password?",
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 12,
+                  ),
+                )
+              ),
+              SizedBox(height: 32),
               _sendEmailButton(),
             ],
           ),
@@ -69,11 +103,35 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         ),
         alignment: Alignment.center,
-        child: Text("Send",
+        child: Text(
+          "Send",
           style: TextStyle(
             fontFamily: "Poppins",
             fontSize: 16,
             color: Color.fromARGB(255, 255, 122, 39),
+          ),
+        ),
+      ),
+    );
+  }
+
+  TextFormField currentPassword() {
+    return TextFormField(
+      controller: currentPasswordController,
+      obscureText: isObscure,
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Please enter password';
+        // Push Backend
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: 'Current Password',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        suffixIcon: GestureDetector(
+          onTap: () => setState(() => isObscure = !isObscure),
+          child: Icon(
+            isObscure ? Icons.visibility_off : Icons.visibility,
+            color: Colors.grey,
           ),
         ),
       ),
@@ -92,6 +150,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         }
         return null;
       },
+      decoration: inputDecoration(),
     );
   }
 

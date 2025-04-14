@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/finish_signup.dart';
+import 'package:intrn/pages/other_page/finish_signup.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(

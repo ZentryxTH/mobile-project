@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -10,14 +10,15 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController currentPasswordController =
-      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool isObscure = true;
-
-  void _send() {}
+  Future<void> _send() async {
+    if (_formKey.currentState!.validate()) {
+      final email = emailController.text.trim();
+      await AuthenticationRepository.instance.sendPasswordResetEmail(email);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
         title: Text(
-          "Change Password",
+          "Forgot Password",
           style: TextStyle(fontFamily: "Poppins", fontSize: 24),
         ),
       ),
@@ -42,30 +43,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 24),
               Text(
                 "Enter Email Address",
                 style: TextStyle(fontFamily: "Poppins", fontSize: 16),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 6),
               emailBox(),
-              SizedBox(height: 16,),
-              Text(
-                "Current Password",
-                style: TextStyle(fontFamily: "Poppins", fontSize: 16),
-              ),
-              SizedBox(height: 8,),
-              currentPassword(),
-              SizedBox(height: 12,),
-              TextButton(
-                onPressed: () => {}, 
-                child: Text("Forgot Password?",
-                  style: TextStyle(
-                    fontFamily: "Poppins",
-                    fontSize: 12,
-                  ),
-                )
-              ),
               SizedBox(height: 32),
               _sendEmailButton(),
             ],
@@ -101,29 +84,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  TextFormField currentPassword() {
-    return TextFormField(
-      controller: currentPasswordController,
-      obscureText: isObscure,
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Please enter password';
-        // Push Backend
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: 'Current Password',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        suffixIcon: GestureDetector(
-          onTap: () => setState(() => isObscure = !isObscure),
-          child: Icon(
-            isObscure ? Icons.visibility_off : Icons.visibility,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-
   TextFormField emailBox() {
     return TextFormField(
       controller: emailController,
@@ -136,7 +96,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         }
         return null;
       },
-      decoration: inputDecoration(),
     );
   }
 

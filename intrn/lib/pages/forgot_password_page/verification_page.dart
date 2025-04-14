@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intrn/data/services/verification_service.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
+import 'package:intrn/pages/forgot_password_page/create_new_password.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+  final String email;
+
+  const VerificationPage({required this.email, super.key});
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -24,8 +28,33 @@ class _VerificationPageState extends State<VerificationPage> {
     }
   }
 
-  void _sendCode() {
+  Future<void> _sendCode() async {
+    final code = codeController.map((c) => c.text).join();
+    final isVerified = await AuthenticationRepository.instance.verifyOtp(
+      email: widget.email,
+      otp: code,
+    );
 
+    if (isVerified) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CreateNewPassword(email: widget.email),
+        ),
+      );
+    } else {
+      _showError("Incorrect code");
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override

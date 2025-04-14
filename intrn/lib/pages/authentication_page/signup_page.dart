@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/create_profile_page.dart';
-import 'package:intrn/pages/login_page.dart';
+import 'package:intrn/pages/profile_page/create_profile_page.dart';
+import 'package:intrn/pages/authentication_page/login_page.dart';
 import 'package:intrn/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intrn/data/repositories/authentication_repository.dart';

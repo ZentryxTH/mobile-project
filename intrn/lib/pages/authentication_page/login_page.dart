@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/home_page.dart';
-import 'package:intrn/pages/signup_page.dart';
+import 'package:intrn/pages/main_page/home_page.dart';
+import 'package:intrn/pages/authentication_page/signup_page.dart';
 import 'package:intrn/firebase_options.dart';
 import 'package:intrn/data/repositories/authentication_repository.dart';
+import 'package:intrn/pages/forgot_password_page/forgot_password_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -37,9 +38,9 @@ class _LoginPageState extends State<LoginPage> {
         // Navigate on success
         Navigator.of(context).pushReplacement(_fadeRoute(const HomePage()));
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
   }
@@ -94,28 +95,35 @@ class _LoginPageState extends State<LoginPage> {
                           "Welcome Back",
                           style: TextStyle(fontFamily: "Poppins", fontSize: 24),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         emailBox(),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24),
                         passwordBox(),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Forget Password?",
-                              style: TextStyle(
-                                color: Color(0xFFFF7A27),
-                                fontFamily: "Poppins",
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  _fadeRoute(ForgotPasswordPage()),
+                                );
+                              },
+                              child: Text(
+                                "Forget Password?",
+                                style: TextStyle(
+                                  color: Color(0xFFFF7A27),
+                                  fontFamily: "Poppins",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24),
                         loginButton(),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

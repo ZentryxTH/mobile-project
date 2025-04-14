@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 
 class CreateNewPassword extends StatefulWidget {
-  const CreateNewPassword({super.key});
+  final String email;
+
+  const CreateNewPassword({Key? key, required this.email}) : super(key: key);
 
   @override
   State<CreateNewPassword> createState() => _CreateNewPasswordState();
@@ -15,9 +18,8 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isObscure = true;
 
-  void _send() {
+  void _send() async {
     if (_formKey.currentState!.validate()) {
-      // Check if passwords match
       if (newPasswordController.text != confirmNewPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Passwords do not match')),
@@ -25,60 +27,64 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
         return;
       }
 
-      // Simulate password update success
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 64,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "Password Have Changed",
-                style: TextStyle(
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); 
-                  Navigator.of(context).pop(); 
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 122, 39),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                ),
-                child: const Text(
-                  "Back to Home",
+      try {
+        await AuthenticationRepository.instance
+            .updatePassword(newPasswordController.text);
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.check_circle, color: Colors.green, size: 64),
+                const SizedBox(height: 16),
+                const Text(
+                  "Password has been changed",
                   style: TextStyle(
                     fontFamily: "Poppins",
+                    fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Colors.white,
                   ),
                 ),
-              )
-            ],
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close dialog
+                    Navigator.of(context).pop(); // Go back
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 255, 122, 39),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: const Text(
+                    "Back to Home",
+                    style: TextStyle(
+                      fontFamily: "Poppins",
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${e.toString()}")),
+        );
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
