@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intrn/models/education_model.dart';
 import 'package:intrn/data/repositories/eduction_repository.dart';
-import 'package:intrn/pages/add_resume_page.dart';
+import 'package:intrn/pages/profile_page/add_resume_page.dart';
 import 'package:intrn/data/services/first_letter_uppercase.dart';
 
 class AddEducationPage extends StatefulWidget {

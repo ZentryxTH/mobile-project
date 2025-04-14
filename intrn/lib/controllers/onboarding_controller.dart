@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:intrn/pages/login_page.dart';
+import 'package:intrn/pages/authentication_page/login_page.dart';
 
 class OnboardingController extends GetxController{
   static OnboardingController get Instance => Get.find();

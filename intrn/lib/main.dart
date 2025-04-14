@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/create_profile_page.dart';
-import 'package:intrn/pages/onboarding_page.dart';
+import 'package:intrn/pages/onboarding_page/onboarding_page.dart';
 import 'package:get/get.dart';
 import 'package:intrn/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

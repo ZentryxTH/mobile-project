@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
-import 'package:intrn/pages/add_education_page.dart';
+import 'package:intrn/pages/profile_page/add_education_page.dart';
 import 'package:intrn/data/services/first_letter_uppercase.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';

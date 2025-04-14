@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:intrn/pages/home_page.dart';
-import 'package:intrn/pages/onboarding_page.dart';
+import 'package:intrn/pages/main_page/home_page.dart';
+import 'package:intrn/pages/onboarding_page/onboarding_page.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -97,8 +96,54 @@ class AuthenticationRepository extends GetxController {
         message = e.message ?? 'Something went wrong.';
     }
 
+    
+
     Get.snackbar("Authentication Error", message,
         snackPosition: SnackPosition.BOTTOM);
   }
+
+  // Send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar("Password Reset", "Password reset link sent to $email",
+          snackPosition: SnackPosition.BOTTOM);
+    } on FirebaseAuthException catch (e) {
+      _showFirebaseError(e);
+    }
+  }
+
+  // Verify OTP
+  Future<bool> verifyOtp({required String email, required String otp}) async {
+    try {
+      // You can implement your actual verification logic here,
+      // for example, checking the OTP code from Firestore or a secure server
+
+      // Placeholder for actual logic — you should replace this
+      final storedOtp = await _getOtpFromServerOrDatabase(email); // Implement this
+      return storedOtp == otp;
+    } catch (e) {
+      Get.snackbar("Error", "OTP verification failed",
+          snackPosition: SnackPosition.BOTTOM);
+      return false;
+    }
+  }
+
+  // Example placeholder function
+  Future<String> _getOtpFromServerOrDatabase(String email) async {
+    // Simulate a backend/database call — replace this with real logic
+    return "123456"; // <-- Replace with actual retrieval logic
+  }
   
+  Future<void> updatePassword(String newPassword) async {
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      await user.updatePassword(newPassword);
+      await user.reload();
+    } else {
+      throw FirebaseAuthException(code: "user-not-found", message: "User not logged in.");
+    }
+  }
+
 }
