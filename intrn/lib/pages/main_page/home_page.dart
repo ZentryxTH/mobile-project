@@ -5,6 +5,8 @@ import 'package:intrn/models/job_card_list.dart';
 import 'package:intrn/widgets/job_card.dart';
 import 'package:intrn/widgets/recent_job.dart';
 import 'package:intrn/models/recent_job_list.dart';
+import 'package:get/get.dart';
+import 'package:intrn/pages/notification_page/notification_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -113,36 +115,32 @@ class _HomePageState extends State<HomePage> {
       ),
       actions: [
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+          padding: const EdgeInsetsDirectional.only(end: 12),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.black,
-                      size: 32,
-                    ),
-                  ),
-                ],
-              ),
+              // Notification Button
               Padding(
-                padding: EdgeInsets.all(12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.chat_outlined,
-                      color: Colors.black,
-                      size: 32,
-                    ),
-                  ],
+                padding: const EdgeInsets.all(8),
+                child: IconButton(
+                  onPressed: () => Get.to(() => NotificationPage()),
+                  icon: const Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.black,
+                    size: 28,
+                  ),
+                ),
+              ),
+
+              // Chat Icon
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.chat_outlined,
+                    color: Colors.black,
+                    size: 28,
+                  ),
                 ),
               ),
             ],
