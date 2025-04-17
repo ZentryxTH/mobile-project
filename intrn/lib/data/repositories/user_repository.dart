@@ -28,4 +28,9 @@ class UserRepository {
       throw Exception("Image upload failed: $e");
     }
   }
+
+   Future<UserModel> getUserById(String userId) async {
+    final doc = await _db.collection('users').doc(userId).get();
+    return UserModel.fromSnapshot(doc);
+  }
 }

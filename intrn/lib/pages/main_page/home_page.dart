@@ -7,6 +7,7 @@ import 'package:intrn/widgets/recent_job.dart';
 import 'package:intrn/models/recent_job_list.dart';
 import 'package:get/get.dart';
 import 'package:intrn/pages/notification_page/notification_page.dart';
+import 'package:intrn/controllers/user_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
       selectedCategory = category;
     });
   }
+
+  final userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -86,14 +89,18 @@ class _HomePageState extends State<HomePage> {
 
   AppBar homeAppBar() {
     return AppBar(
-      title: Text(
-        "Hello, John Doe",
-        style: TextStyle(
+      title: Obx(() {
+      final fname = userController.user.value.firstName;
+      final lname = userController.user.value.lastName;
+      return Text(
+        "Hello, $fname $lname",
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontFamily: "Poppins",
-        )
-      ),
+        ),
+      );
+    }),
       backgroundColor: Color(0xFFF5F5F5),
       leading: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
@@ -183,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.black, // Background color of the button
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
+                      borderRadius: BorderRadius.circular(10), //  Rounded corners
                     ),
                     child: Icon(Icons.tune, color: Colors.white), // Sorting icon
                   ),
