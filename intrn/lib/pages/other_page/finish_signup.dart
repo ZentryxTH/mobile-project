@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/home_page.dart';
+import 'package:intrn/pages/main_page/home_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
 import 'package:intrn/widgets/category_filter.dart';
-import 'package:intrn/data/repositories/job_card_list.dart';
+import 'package:intrn/models/job_card_list.dart';
 import 'package:intrn/widgets/job_card.dart';
 import 'package:intrn/widgets/recent_job.dart';
-import 'package:intrn/data/repositories/recent_job_list.dart';
+import 'package:intrn/models/recent_job_list.dart';
+import 'package:get/get.dart';
+import 'package:intrn/pages/notification_page/notification_page.dart';
+import 'package:intrn/controllers/user_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +24,8 @@ class _HomePageState extends State<HomePage> {
       selectedCategory = category;
     });
   }
+
+  final userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -73,7 +79,8 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return RecentJob(job: recentJobs[index]); // Updated to use RecentJob
               },
-            )
+            ),
+            TextButton(onPressed: AuthenticationRepository.instance.logout, child: Text("Sign out")),
           ],
         )
       ),
@@ -82,14 +89,18 @@ class _HomePageState extends State<HomePage> {
 
   AppBar homeAppBar() {
     return AppBar(
-      title: Text(
-        "Hello, John Doe",
-        style: TextStyle(
+      title: Obx(() {
+      final fname = userController.user.value.firstName;
+      final lname = userController.user.value.lastName;
+      return Text(
+        "Hello, $fname $lname",
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontFamily: "Poppins",
-        )
-      ),
+        ),
+      );
+    }),
       backgroundColor: Color(0xFFF5F5F5),
       leading: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
@@ -111,36 +122,32 @@ class _HomePageState extends State<HomePage> {
       ),
       actions: [
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+          padding: const EdgeInsetsDirectional.only(end: 12),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.black,
-                      size: 32,
-                    ),
-                  ),
-                ],
-              ),
+              // Notification Button
               Padding(
-                padding: EdgeInsets.all(12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.chat_outlined,
-                      color: Colors.black,
-                      size: 32,
-                    ),
-                  ],
+                padding: const EdgeInsets.all(8),
+                child: IconButton(
+                  onPressed: () => Get.to(() => NotificationPage()),
+                  icon: const Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.black,
+                    size: 28,
+                  ),
+                ),
+              ),
+
+              // Chat Icon
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.chat_outlined,
+                    color: Colors.black,
+                    size: 28,
+                  ),
                 ),
               ),
             ],
@@ -183,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.black, // Background color of the button
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
+                      borderRadius: BorderRadius.circular(10), //  Rounded corners
                     ),
                     child: Icon(Icons.tune, color: Colors.white), // Sorting icon
                   ),

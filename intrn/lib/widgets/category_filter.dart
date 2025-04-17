@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/data/repositories/category_filter_list.dart';
+import 'package:intrn/models/category_filter_list.dart';
 
 class CategoryFilter extends StatefulWidget {
   final Function(String) onCategorySelected;
