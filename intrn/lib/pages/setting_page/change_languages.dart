@@ -36,14 +36,14 @@ class _ChangeLanguagesState extends State<ChangeLanguages> {
         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           children: [
-            languageOption("English", "", () {
+            languageOption("English", "assets/flags/english.png", () {
               Get.updateLocale(const Locale('en', 'US'));
             }),
-            languageOption("Thai", "", () {
+            languageOption("Thai", "assets/flags/thai.png", () {
               // TODO: change language to Thai
               Get.updateLocale(const Locale('th', 'TH'));
             }),
-            languageOption("Chinese", "", () {
+            languageOption("Chinese", "assets/flags/china.png", () {
               // TODO: change language to Chinese
               Get.updateLocale(const Locale('zh', 'ZH'));
             }),
