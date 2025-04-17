@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intrn/pages/main_page/home_page.dart';
@@ -7,7 +8,23 @@ class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   late final Rx<User?> _firebaseUser;
+
+  // Get current user
+  User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+
+  // Or get just the UID (optional convenience)
+  String? getCurrentUserId() {
+    return _auth.currentUser?.uid;
+  }
+
+  // Or get email
+  String? getCurrentUserEmail() {
+    return _auth.currentUser?.email;
+  }
 
   // Called when controller is ready
   @override
@@ -32,7 +49,19 @@ class AuthenticationRepository extends GetxController {
     required String password,
   }) async {
     try {
+      // Create user
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
+
+      // Get current user
+      final user = _auth.currentUser;
+
+      // Save user info in Firestore
+      if (user != null) {
+        await _fireStore.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "email": user.email,
+        });
+      }
     } on FirebaseAuthException catch (e) {
       _showFirebaseError(e);
     } catch (e) {
@@ -47,6 +76,17 @@ class AuthenticationRepository extends GetxController {
   }) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      // Get current user
+      final user = _auth.currentUser;
+
+      // Save user info in Firestore
+      if (user != null) {
+        await _fireStore.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "email": user.email,
+        });
+      }
     } on FirebaseAuthException catch (e) {
       throw Exception(_getErrorMessage(e));
     }
