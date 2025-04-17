@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:intrn/pages/setting_page/change_languages.dart';
+import 'package:intrn/pages/setting_page/change_password.dart';
+import 'package:intrn/data/repositories/authentication_repository.dart';
+import 'package:intrn/data/repositories/notification_repository.dart';
+import 'package:get/get.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -45,13 +49,13 @@ class _SettingPageState extends State<SettingPage> {
             settingTitle("Security"),
             SizedBox(height: 12,),
             settingButton("Change Password", Icons.lock_outline, onTap: () {
-              // TODO: Implement change password
+              Get.to(() => ChangePasswordPage());
             }),
             divider(),
             settingTitle("Preference"),
             SizedBox(height: 12,),
             settingButton('Languages', Icons.language, onTap: () {
-              Get.to(() => const ChangeLanguages());
+              Get.to(() => ChangeLanguages());
             }),
             SizedBox(height: 16,),
             switchButton("Dark Mode", isDarkMode, (value) {
@@ -60,14 +64,13 @@ class _SettingPageState extends State<SettingPage> {
             divider(),
             settingTitle("Notification"),
             SizedBox(height: 12,),
-            switchButton("Notification", isNotificationOn, (value) {
-              setState(() => isNotificationOn = value);
-            }),
+            notificationSwitchButton("Notification"),
             SizedBox(height: 32,),
             Center(
               child: OutlinedButton(
                 onPressed: () {
                   // TODO: Log out logic
+                  AuthenticationRepository.instance.logout;
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
@@ -179,5 +182,45 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
     );
+  }
+
+  Widget notificationSwitchButton(String title) {
+  final notificationRepo = NotificationRepository.instance;
+
+  return Obx(() => Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(32),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Switch(
+              value: !notificationRepo.isMuted.value,
+              onChanged: (val) {
+                notificationRepo.toggleMute(!val); // If off, mute true
+              },
+              activeColor: Color.fromARGB(255, 255, 122, 39),
+            ),
+          ],
+        ),
+      ));
   }
 }

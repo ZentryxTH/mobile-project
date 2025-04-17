@@ -7,6 +7,8 @@ class NotificationRepository extends GetxController {
 
   final _firebaseMessaging = FirebaseMessaging.instance;
 
+  var isMuted = false.obs; 
+
   Future<void> initNotifications() async {
     // 🔐 Request permission
     await _firebaseMessaging.requestPermission(
@@ -35,5 +37,9 @@ class NotificationRepository extends GetxController {
       print('📬 Notification opened app');
       print('Title: ${message.notification?.title}');
     });
+  }
+  
+  void toggleMute(bool value) {
+    isMuted.value = value;
   }
 }
