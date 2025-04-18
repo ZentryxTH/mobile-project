@@ -8,6 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intrn/models/user_model.dart';
 import 'package:intrn/data/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
+
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -97,12 +100,18 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   // Save User data
   Future<void> _saveProfile() async {
     if (formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(child: CircularProgressIndicator()),
+      );
+
       try {
         final user = FirebaseAuth.instance.currentUser!;
         String imageUrl = '';
 
         if (_image != null) {
-          imageUrl = await _repo.uploadImage(_image!);
+          imageUrl = await _saveImageLocally(_image!); // This will now compress the image
         }
 
         final userModel = UserModel(
@@ -116,26 +125,52 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
         );
 
         await _repo.createUser(userModel);
-        
-        if (mounted){
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Profile saved!")));
+
+        if (mounted) {
+          Navigator.of(context).pop(); // remove loading
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile saved!")));
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Error: $e")));
+          Navigator.of(context).pop(); // remove loading
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
         }
       }
     }
   }
 
-  void _next() {
+  Future<String> _saveImageLocally(File imageFile) async {
+    // Read the image file into memory
+    final imageBytes = await imageFile.readAsBytes();
+
+    // Decode the image to an image object
+    img.Image? image = img.decodeImage(Uint8List.fromList(imageBytes));
+
+    if (image == null) {
+      throw Exception("Failed to decode image");
+    }
+
+    // Compress the image
+    final compressedImage = img.encodeJpg(image, quality: 85); // Adjust quality as needed (0-100)
+
+    // Get the directory to save the image
+    final directory = await getApplicationDocumentsDirectory();
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final filePath = '${directory.path}/$fileName';
+
+    // Write the compressed image to file
+    final compressedFile = File(filePath)..writeAsBytesSync(compressedImage);
+
+    // Return the local file path for storage
+    return filePath;
+  }
+
+  void _next() async {
     if (formKey.currentState!.validate()) {
-      _saveProfile();
-      Navigator.of(context).pushReplacement(_fadeRoute(AddEducationPage()));
+      await _saveProfile();
+      if (mounted) {
+        Navigator.of(context).pushReplacement(_fadeRoute(AddEducationPage()));
+      }
     }
   }
 
@@ -313,7 +348,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     : DateFormat('dd/MM/yyyy').format(selectedDate!),
           ),
           validator:
-              (value) => value!.isEmpty ? "First name is required" : null,
+              (value) => value!.isEmpty ? "Birth date is required" : null,
         ),
       ),
     );
