@@ -53,6 +53,8 @@ dependencies:
   flutter_screenutil: ^5.9.3
   auto_size_text: ^3.0.0
   firebase_messaging: ^14.7.10
+  share_plus: ^10.1.4
+  
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+
+
 
 
 class Build_infocard extends StatelessWidget {
@@ -157,9 +160,10 @@ AppBar appbarCard() {
                   child: IconButton(
                     color: Colors.black,
                     icon: Icon(Icons.share),
-                    onPressed: () {
-                      
-                      print('แชร์');
+                    onPressed: () async {
+                      // await Share.share('text');
+                      final url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+                      await Share.share(url);
                     },
                   ),
                 ),
