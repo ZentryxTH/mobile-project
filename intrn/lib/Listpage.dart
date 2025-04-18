@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
-import 'simulate/Homepage.dart';
+// import 'simulate/Homepage.dart';
 import 'package:intrn/widget/list_card.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+class ListPage extends StatefulWidget {
+  const ListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: NavigationBars(),
-      initialRoute: '/listpage',
-      routes: {
-        '/homepage': (context) =>  Homepage(),
-        '/listpage': (context) =>  NavigationBars(),
-        // '/profilepage': (context) => const ProfilePage(),
-      },
-    );
-  }
-}
-class NavigationBars extends StatefulWidget {
-  const NavigationBars({super.key});
-
-  @override
-  State<NavigationBars> createState() => NavigationBarState();
+  State<ListPage> createState() => ListPagetate();
 }
 
-class NavigationBarState extends State<NavigationBars>{
-  // const NavigationBars({super.key});
+class ListPagetate extends State<ListPage>{
+  // const ListPage({super.key});
   int pageindex = 1 ;
   List<String> titles = <String>['Favourite', 'In progess', 'Applied'];
   
