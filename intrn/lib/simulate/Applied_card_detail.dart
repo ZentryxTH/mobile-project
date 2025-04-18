@@ -3,7 +3,8 @@ import 'package:intrn/widget/Information_tabbar.dart';
 import 'package:intrn/widget/Information_card.dart';
 
 class Applieds extends StatefulWidget {
-  const Applieds({super.key});
+  final String jobTitle;
+  const Applieds({super.key,required this.jobTitle});
 
   @override
   State<Applieds> createState() => Appliedstate();
@@ -47,16 +48,19 @@ class Appliedstate extends State<Applieds> {
                             child: Column(
                               children: [
                                 Text(
-                                  'IT Support',
+                                  widget.jobTitle,
                                   style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 33,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   'SCB',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: const Color.fromARGB(255, 32, 32, 32),
+                                    ),
                                 ),
                                 SizedBox(height: 2),
                                 Row(
@@ -67,7 +71,7 @@ class Appliedstate extends State<Applieds> {
                                     Text(
                                       'Thailand, Bangkok',
                                       style:
-                                          TextStyle(color: Colors.grey[600]),
+                                          TextStyle(color: const Color.fromARGB(255, 58, 58, 58)),
                                     ),
                                   ],
                                 ),
@@ -80,10 +84,10 @@ class Appliedstate extends State<Applieds> {
                             runSpacing: 20,
                             alignment: WrapAlignment.center,
                             children: [
-                              Build_infocard(icon: Icons.monetization_on, text: "Salary"),
-                              Build_infocard(icon: Icons.work, text: "Job type\nFull-time"),
-                              Build_infocard(icon: Icons.wifi, text: "Work model\nOnline"),
-                              Build_infocard(icon: Icons.stacked_line_chart, text: "Level\nInternship"),
+                              Build_infocard(icon: Icons.monetization_on, text: "Salary",text2: "1000-2000",),
+                              Build_infocard(icon: Icons.work, text: "Job type",text2: "Full-time",),
+                              Build_infocard(icon: Icons.wifi, text: "Work model",text2: "Online",),
+                              Build_infocard(icon: Icons.stacked_line_chart, text: "Level",text2: "Internship",),
                             ],
                           ),
                           Padding(

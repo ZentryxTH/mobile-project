@@ -37,18 +37,7 @@ class AboutContent extends StatelessWidget {
             style: TextStyle(color: Colors.grey[600]),
           ),
           const SizedBox(height: 16),
-          // const Text(
-          //   'Requirements',
-          //   style: TextStyle(
-          //     fontSize: 18,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-          // const SizedBox(height: 8),
-          // Text(
-          //   '• 3+ years of experience\n• Bachelor\'s degree in related field\n• Strong communication skills\n• Technical skills as required',
-          //   style: TextStyle(color: Colors.grey[600]),
-          // ),
+          
         ],
       ),
     );

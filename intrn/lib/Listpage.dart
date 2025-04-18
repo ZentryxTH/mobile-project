@@ -92,9 +92,9 @@ class Listpages extends StatefulWidget {
 }
 
 class Listpagestate extends State<Listpages> {
-  List<String> favouriteList = ['data science','test','test2'];
-  List<String> inProgressList = ['data science'];
-  List<String> appliedlist = ['data science'];
+  List<String> favouriteList = ['Data science','test','test2'];
+  List<String> inProgressList = ['Data science'];
+  List<String> appliedlist = ['Data science'];
 
   @override
   Widget build(BuildContext context) {

@@ -35,10 +35,16 @@ class Mycardstate extends State<Mycard> {
               context,
               MaterialPageRoute(builder: (context) => 
               widget.isInProgress
-              ? Inprogess()
+              ? Inprogess(
+                jobTitle: widget.jobTitle,
+              )
               :widget.isApplied
-              ? Applieds()
-              : Favourite()),
+              ? Applieds(
+                jobTitle: widget.jobTitle,
+              )
+              : Favourite(
+                jobTitle: widget.jobTitle,
+              )),
             );
           },
           child: Row(

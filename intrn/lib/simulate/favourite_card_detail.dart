@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intrn/widget/Information_tabbar.dart';
 import 'package:intrn/widget/Information_card.dart';
 
+
 class Favourite extends StatefulWidget {
-  const Favourite({super.key});
+  final String jobTitle;
+  const Favourite({super.key,required this.jobTitle});
 
   @override
   State<Favourite> createState() => _FavouriteState();
@@ -47,16 +49,18 @@ class _FavouriteState extends State<Favourite> {
                             child: Column(
                               children: [
                                 Text(
-                                  'IT Support',
+                                  widget.jobTitle,
                                   style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 33,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   'SCB',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 32, 32, 32),
+                                    fontSize: 16),
                                 ),
                                 SizedBox(height: 2),
                                 Row(
@@ -67,7 +71,7 @@ class _FavouriteState extends State<Favourite> {
                                     Text(
                                       'Thailand, Bangkok',
                                       style:
-                                          TextStyle(color: Colors.grey[600]),
+                                          TextStyle(color: const Color.fromARGB(255, 58, 58, 58)),
                                     ),
                                   ],
                                 ),
@@ -80,10 +84,10 @@ class _FavouriteState extends State<Favourite> {
                             runSpacing: 20,
                             alignment: WrapAlignment.center,
                             children: [
-                              Build_infocard(icon: Icons.monetization_on, text: "Salary"),
-                              Build_infocard(icon: Icons.work, text: "Job type\nFull-time"),
-                              Build_infocard(icon: Icons.wifi, text: "Work model\nOnline"),
-                              Build_infocard(icon: Icons.stacked_line_chart, text: "Level\nInternship"),
+                              Build_infocard(icon: Icons.monetization_on, text: "Salary",text2: "1000-2000",),
+                              Build_infocard(icon: Icons.work, text: "Job type",text2: "Full-time",),
+                              Build_infocard(icon: Icons.wifi, text: "Work model",text2: "Online",),
+                              Build_infocard(icon: Icons.stacked_line_chart, text: "Level",text2: "Internship",),
                             ],
                           ),
                           Padding(
@@ -180,14 +184,13 @@ class _FavouriteState extends State<Favourite> {
           borderRadius: BorderRadius.circular(0),
           boxShadow: isSelected ? [
             BoxShadow(
-              color: const Color.fromARGB(255, 219, 219, 219),
+              color: const Color.fromARGB(255, 235, 234, 234),
               blurRadius: 2,
-              spreadRadius: 1,
-              offset: const Offset(0, 1),
+              spreadRadius: 3,
+              offset: const Offset(0, 3),
             )
           ] : [BoxShadow(
-            color: const Color.fromARGB(255, 207, 207, 207),
-              blurRadius: 0,
+            color: const Color.fromARGB(255, 241, 241, 241),
               spreadRadius: 1,
               offset: const Offset(1, -1),
           )],
@@ -206,6 +209,9 @@ class _FavouriteState extends State<Favourite> {
             left: BorderSide(
               color: const Color.fromARGB(255, 231, 231, 231)
             ),
+            right: BorderSide(
+              color: const Color.fromARGB(255, 231, 231, 231)
+            )
             
           ),
         ),
