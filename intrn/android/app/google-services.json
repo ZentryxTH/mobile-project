@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234330222829",
+    "project_id": "intrn-data",
+    "storage_bucket": "intrn-data.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234330222829:android:341ff99ed60f65b10edce4",
+        "android_client_info": {
+          "package_name": "com.example.intrn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234330222829-qi1nb9ohk7snpjrlv0ussk0ehuvnfepk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO2IrK_8jZK0roFp3o6siojalFikNbR4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234330222829-qi1nb9ohk7snpjrlv0ussk0ehuvnfepk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
