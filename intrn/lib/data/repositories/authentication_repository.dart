@@ -85,7 +85,7 @@ class AuthenticationRepository extends GetxController {
         await _fireStore.collection("users").doc(user.uid).set({
           "uid": user.uid,
           "email": user.email,
-        });
+        }, SetOptions(merge: true));
       }
     } on FirebaseAuthException catch (e) {
       throw Exception(_getErrorMessage(e));

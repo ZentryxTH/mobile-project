@@ -70,7 +70,7 @@ class ChatList extends StatelessWidget {
             builder: (_) => ChatRoomPage(
               receiverFirstname: userData['firstName'] ?? '',
               receiverLastname: userData['lastName'] ?? '',
-              receiverID: userData['uid'] ?? '',
+              receiverID: userData['uid'],
             ),
           ),
         );

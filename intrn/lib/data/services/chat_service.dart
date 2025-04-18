@@ -14,7 +14,10 @@ class ChatService {
     return _fireStore.collection("users").snapshots().map((snapshot) {
       return snapshot.docs
           .where((doc) => doc.id != currentUser?.uid)
-          .map((doc) => doc.data())
+          .map((doc) => {
+            ...doc.data(),
+            'uid': doc.id, // include the UID
+          })
           .toList()
           .cast<Map<String, dynamic>>();
     });
@@ -52,5 +55,13 @@ class ChatService {
     String chatRoonID = ids.join('_');
 
     return _fireStore.collection("chat_room").doc(chatRoonID).collection('messages').orderBy('timestamp', descending: false).snapshots();
+  }
+
+  // Delete message
+  Future<void> deleteMessage(String messageId) async {
+    await FirebaseFirestore.instance
+        .collection("messages")
+        .doc(messageId)
+        .delete();
   }
 }
