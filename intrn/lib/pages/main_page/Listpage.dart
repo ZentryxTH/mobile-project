@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'simulate/Homepage.dart';
-import 'package:intrn/widget/list_card.dart';
+import 'package:intrn/widgets/list_card.dart';
 
 
 

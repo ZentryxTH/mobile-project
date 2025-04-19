@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/widget/Information_tabbar.dart';
-import 'package:intrn/widget/Information_card.dart';
+import 'package:intrn/widgets/Information_tabbar.dart';
+import 'package:intrn/widgets/Information_card.dart';
 
 class Inprogess extends StatefulWidget {
   final String jobTitle;
