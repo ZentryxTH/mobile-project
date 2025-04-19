@@ -9,7 +9,7 @@ class UserModel {
   final String birthDate;
   final String phone;
   final String country;
-  final String imageUrl; // URL from Firebase Storage
+  String? imageUrl; // Nullable imageUrl to handle missing image
 
   // Constructor
   UserModel({
@@ -20,7 +20,7 @@ class UserModel {
     required this.birthDate,
     required this.phone,
     required this.country,
-    required this.imageUrl,
+    this.imageUrl, // Make imageUrl nullable here
   });
 
   // Convert object to JSON for saving to Firebase
@@ -32,7 +32,7 @@ class UserModel {
       "birthDate": birthDate,
       "phone": phone,
       "country": country,
-      "imageUrl": imageUrl,
+      "imageUrl": imageUrl, // imageUrl can be null
     };
   }
 
@@ -47,7 +47,7 @@ class UserModel {
       birthDate: data['birthDate'],
       phone: data['phone'],
       country: data['country'],
-      imageUrl: data['imageUrl'],
+      imageUrl: data['imageUrl'], // imageUrl can be null in Firestore
     );
   }
 }
