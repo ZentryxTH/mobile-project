@@ -69,8 +69,7 @@ class _SettingPageState extends State<SettingPage> {
             Center(
               child: OutlinedButton(
                 onPressed: () {
-                  // TODO: Log out logic
-                  AuthenticationRepository.instance.logout;
+                  AuthenticationRepository.instance.logout();
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),

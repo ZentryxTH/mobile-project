@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'simulate/Homepage.dart';
 import 'package:intrn/widgets/list_card.dart';
-
-
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -11,229 +8,126 @@ class ListPage extends StatefulWidget {
   State<ListPage> createState() => ListPagetate();
 }
 
-class ListPagetate extends State<ListPage>{
-  // const ListPage({super.key});
-  int pageindex = 1 ;
-  List<String> titles = <String>['Favourite', 'In progess', 'Applied'];
-  
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          labelTextStyle: WidgetStateProperty .resolveWith<TextStyle>((
-            Set<WidgetState> states,
-          ) {
-            if (states.contains(WidgetState.selected)) {
-              return TextStyle(color: Colors.deepOrangeAccent);
-            }else{
-              return TextStyle(color: Colors.black);
-            }
-          }),
-        ),
-    child: NavigationBar(
-      backgroundColor: Color.fromARGB(255, 243, 243, 243),
-      selectedIndex: pageindex,
-      onDestinationSelected: (int index) {
-        setState(() {
-          pageindex = index;
-        });
-        if (index == 0) {
-              Navigator.pushNamed(context, '/homepage');
-            } 
-      },
-      
-      destinations: [
-        NavigationDestination(
-          icon: Icon(Icons.home_outlined, color: pageindex == 0 ? Colors.deepOrangeAccent : null),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.list_alt_outlined, color: pageindex == 1 ? Colors.deepOrangeAccent : null),
-          label: 'List',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outlined, color: pageindex == 2 ? Colors.deepOrangeAccent : null),
-          label: 'Profile',
-        ),
-      ],
-    ),
-      ),
-      body: Listpages(),
-    );
-  }
-}
-
-class Listpages extends StatefulWidget {
-  const Listpages({super.key});
-
-  @override
-  State<Listpages> createState() => Listpagestate();
-}
-
-class Listpagestate extends State<Listpages> {
-  List<String> favouriteList = ['Data science','test','test2'];
+class ListPagetate extends State<ListPage> {
+  List<String> favouriteList = ['Data science', 'test', 'test2'];
   List<String> inProgressList = ['Data science'];
   List<String> appliedlist = ['Data science'];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 3, 
-        child: Scaffold(
-          appBar: appbars(),
-          body: Column(
-            children: [
-              Container(
-                color: const Color.fromARGB(255, 235, 235, 235), 
-                child: TabBar(
-                  indicatorColor: Colors.deepOrangeAccent,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Tab(text: 'Favourite'),
-                    Tab(text: 'In progress'),
-                    Tab(text: 'Applied'),
+    return Scaffold(
+      appBar: appbars(),
+      body: DefaultTabController(
+        length: 3,
+        child: Column(
+          children: [
+            Container(
+              color: const Color.fromARGB(255, 235, 235, 235),
+              child: const TabBar(
+                indicatorColor: Colors.deepOrangeAccent,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.black,
+                tabs: [
+                  Tab(text: 'Favourite'),
+                  Tab(text: 'In progress'),
+                  Tab(text: 'Applied'),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: TabBarView(
+                  children: [
+                    _buildJobList(favouriteList, "Don't have any favourite", isInProgress: false, isApplied: false),
+                    _buildJobList(inProgressList, "Don't have any in progress", isInProgress: true, isApplied: false),
+                    _buildJobList(appliedlist, "Don't have any applications", isInProgress: false, isApplied: true),
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: TabBarView(
-                  children: [
-                     favouriteList.isEmpty
-                          ? _buildEmptyState("Don't have any favourite")
-                          : ListView.builder(
-                            itemCount: favouriteList.length,
-                            itemBuilder: (context, index) {
-                              return Mycard(
-                                jobTitle: favouriteList[index],
-                                isInProgress: false,
-                                isApplied: false,
-                                onFavoriteToggle: (title, isFav) {
-                                  setState(() {
-                                    if (isFav) {
-                                      favouriteList.add(title);
-                                    } else {
-                                      favouriteList.remove(title);
-                                    }
-                                  }
-                                  );
-                                },
-                              );
-
-                            },
-                          ),
-                      inProgressList.isEmpty
-                          ? _buildEmptyState("Don't have any in progress")
-                          : ListView.builder(
-                            itemCount: inProgressList.length,
-                            itemBuilder: (context, index) {
-                              return Mycard(
-                                jobTitle: inProgressList[index],
-                                isInProgress: true,
-                                isApplied: false,
-                                onFavoriteToggle: (title, isFav) {
-                                  setState(() {
-                                    if (isFav) {
-                                      favouriteList.add(title);
-                                    } else {
-                                      favouriteList.remove(title);
-                                    }
-                                  }
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                      appliedlist.isEmpty
-                          ? _buildEmptyState("Don't have any applications")
-                          : ListView.builder(
-                            itemCount: appliedlist.length,
-                            itemBuilder: (context, index) {
-                              return Mycard(
-                                jobTitle: appliedlist[index],
-                                isInProgress: false,
-                                isApplied: true,
-                                onFavoriteToggle: (title, isFav) {
-                                  setState(() {
-                                    if (isFav) {
-                                      favouriteList.add(title);
-                                    } else {
-                                      favouriteList.remove(title);
-                                    }
-                                  }
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                    ],
-                ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-
-    ),
+      ),
     );
   }
 
   AppBar appbars() {
-    return AppBar( 
+    return AppBar(
       toolbarHeight: 80,
-          backgroundColor: Colors.transparent,
-          flexibleSpace: Stack(
-             fit: StackFit.expand,
-             children: [
-              Image(
-                image: AssetImage("assets/images/CardTemplate.png"),
-                fit: BoxFit.cover,
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                  'Job List',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
+      backgroundColor: Colors.transparent,
+      flexibleSpace: Stack(
+        fit: StackFit.expand,
+        children: [
+          const Image(
+            image: AssetImage("assets/images/CardTemplate.png"),
+            fit: BoxFit.cover,
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: const Text(
+                'Job List',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
                 ),
-                )
-              )
-             ],
-          ),
-        );
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
+
+  Widget _buildJobList(List<String> jobs, String emptyMessage, {required bool isInProgress, required bool isApplied}) {
+    if (jobs.isEmpty) return _buildEmptyState(emptyMessage);
+
+    return ListView.builder(
+      itemCount: jobs.length,
+      itemBuilder: (context, index) {
+        return Mycard(
+          jobTitle: jobs[index],
+          isInProgress: isInProgress,
+          isApplied: isApplied,
+          onFavoriteToggle: (title, isFav) {
+            setState(() {
+              if (isFav) {
+                favouriteList.add(title);
+              } else {
+                favouriteList.remove(title);
+              }
+            });
+          },
+        );
+      },
+    );
+  }
+
   Widget _buildEmptyState(String message) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.add_box_outlined,
-          size: 70.0,
-          color: Colors.grey,
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          message,
-          textAlign: TextAlign.center,
-          style: TextStyle(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.add_box_outlined,
+            size: 70.0,
             color: Colors.grey,
-            fontSize: 20.0,
           ),
-        ),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: 8.0),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 20.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

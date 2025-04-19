@@ -81,7 +81,6 @@ class _HomePageState extends State<HomePage> {
                 return RecentJob(job: recentJobs[index]); // Updated to use RecentJob
               },
             ),
-            TextButton(onPressed: AuthenticationRepository.instance.logout, child: Text("Sign out")),
           ],
         )
       ),

@@ -27,7 +27,7 @@ class JobCardList {
         city: "Bangkok",
         jobRole: "IT Support",
         labels: ["Full-time", "Online", "Intern"],
-        companyLogo: "",
+        companyLogo: "assets/logo/google.png",
         isFavorited: false
       )
     );
@@ -39,7 +39,7 @@ class JobCardList {
         city: "Bangkok",
         jobRole: "Data Engineer",
         labels: ["Full-time", "Hybrid", "Senior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/ibm.png",
         isFavorited: false
       )
     );
@@ -51,7 +51,7 @@ class JobCardList {
         city: "San Francisco",
         jobRole: "Marketing",
         labels: ["Full-time", "Hybrid", "Senior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/nike.png",
         isFavorited: false
       )
     );
@@ -63,7 +63,7 @@ class JobCardList {
         city: "Bangkok",
         jobRole: "Cashier",
         labels: ["Part-time", "Onsite", "Junior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/teenoi.png",
         isFavorited: false
       )
     );
@@ -75,7 +75,7 @@ class JobCardList {
         city: "Bangkok",
         jobRole: "Software Developer",
         labels: ["Full-time", "Hybrid", "Intern"],
-        companyLogo: "",
+        companyLogo: "assets/logo/taobin.png",
         isFavorited: false
       )
     );
@@ -87,7 +87,7 @@ class JobCardList {
         city: "Los Angeles",
         jobRole: "Game Developer",
         labels: ["Full-time", "Hybrid", "New-Grad"],
-        companyLogo: "",
+        companyLogo: "assets/logo/riot.png",
         isFavorited: false
       )
     );

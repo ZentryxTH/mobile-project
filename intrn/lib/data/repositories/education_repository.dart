@@ -4,6 +4,7 @@ import 'package:intrn/models/education_model.dart';
 
 class EducationRepository {
   final _db = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   // CREATE
   Future<void> createEducation(EducationModel education) async {
@@ -57,5 +58,24 @@ class EducationRepository {
         .collection('education')
         .doc(eduId)
         .delete();
+  }
+
+  Future<void> saveEducation(EducationModel model) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) throw Exception("User not logged in");
+
+    final ref = _db
+        .collection('users')
+        .doc(userId)
+        .collection('education');
+
+    if (model.id != null) {
+      // Update existing education
+      await ref.doc(model.id).set(model.toJson());
+    } else {
+      // Add new education
+      final docRef = await ref.add(model.toJson());
+      model.id = docRef.id; // Store the ID back if needed later
+    }
   }
 }

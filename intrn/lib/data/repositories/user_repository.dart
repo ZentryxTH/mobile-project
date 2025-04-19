@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:intrn/models/user_model.dart';
 import 'package:intrn/data/database/image_database_helper.dart';
+import 'package:intrn/models/user_extended_model.dart';
 
 class UserRepository {
   final _dbHelper = ImageDatabaseHelper.instance;
@@ -31,11 +32,11 @@ class UserRepository {
   // Get user data from Firestore
   Future<UserModel> getUserById(String userId) async {
     final doc = await _db.collection('users').doc(userId).get();
+    if (!doc.exists) throw Exception("User not found");
+    
     final user = UserModel.fromSnapshot(doc);
-
-    // Retrieve image URL from SQLite
     final imageUrl = await _dbHelper.getImageUrlByUserId(userId);
-    user.imageUrl = imageUrl ?? '';  // Use the local image URL if available
+    user.imageUrl = imageUrl ?? '';
 
     return user;
   }
@@ -53,8 +54,52 @@ class UserRepository {
     }
   }
 
+  Future<void> createOrUpdateUserExtended(UserExtendedModel userExtended) async {
+    try {
+      final userId = _auth.currentUser?.uid;
+      if (userId == null) throw Exception("No authenticated user");
+
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection('extended')
+          .doc('profile')
+          .set(userExtended.toJson());
+    } catch (e) {
+      throw Exception("Failed to save extended user data: $e");
+    }
+  }
+
   Future<bool> userExists(String userId) async {
     final doc = await _db.collection('users').doc(userId).get();
     return doc.exists;
   }
-}
+
+  Future<UserExtendedModel?> getUserExtended() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return null;
+
+    final doc = await _db
+        .collection('users')
+        .doc(userId)
+        .collection('extended')
+        .doc('profile')
+        .get();
+
+    if (!doc.exists) return null;
+
+    return UserExtendedModel.fromSnapshot(doc);
+  }
+
+  Future<void> updateUserExtendedField(String field, dynamic value) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('extended')
+        .doc('profile')
+        .update({field: value});
+  }
+  }

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-
-
-
 class Build_infocard extends StatelessWidget {
   const Build_infocard({
     super.key,
@@ -64,7 +61,6 @@ class Build_infocard extends StatelessWidget {
                     ),
                   ),
                 ],
-
               ),
             ),
           ],

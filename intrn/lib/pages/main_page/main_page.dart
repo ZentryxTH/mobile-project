@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-
 import 'package:intrn/pages/main_page/home_page.dart';
 import 'package:intrn/pages/main_page/Listpage.dart';
 import 'package:intrn/pages/profile_page/profile_page.dart';
 
-class NavigationTab extends StatefulWidget {
-  const NavigationTab({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<NavigationTab> createState() => _NavigationTabState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _NavigationTabState extends State<NavigationTab> {
+class _MainPageState extends State<MainPage> {
 
   int _selectedIndex = 0;
 
@@ -27,29 +26,21 @@ class _NavigationTabState extends State<NavigationTab> {
     });
   }
 
+  final List<BottomNavigationBarItem> _navItems = [
+    BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+    BottomNavigationBarItem(icon: Icon(Icons.list_outlined), label: 'List'),
+    BottomNavigationBarItem(icon: Icon(Icons.person_outlined), label: 'Profile'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        items: _navItems,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
-        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_rounded),
-            label: 'Chats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        selectedItemColor: Color.fromARGB(255, 255, 98, 0),
       ),
     );
   }

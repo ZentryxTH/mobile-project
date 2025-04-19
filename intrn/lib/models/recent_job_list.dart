@@ -27,7 +27,7 @@ class RecentJobList {
         city: "Bangkok",
         jobRole: "Data Engineer",
         labels: ["Full-time", "Hybrid", "Senior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/dime.png",
         isFavorited: false
       ),
     );
@@ -39,7 +39,7 @@ class RecentJobList {
         city: "Bangkok",
         jobRole: "Backend Java Engineer",
         labels: ["Full-time", "Onsite", "Senior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/go7.png",
         isFavorited: false
       )
     );
@@ -51,7 +51,7 @@ class RecentJobList {
         city: "Bangkok",
         jobRole: "Data Engineer",
         labels: ["Full-time", "Onsite", "Intern"],
-        companyLogo: "",
+        companyLogo: "assets/logo/sertia.png",
         isFavorited: false
       )
     );
@@ -63,7 +63,7 @@ class RecentJobList {
         city: "Samut Prakan",
         jobRole: "Data Science & AI Intern",
         labels: ["Full-time", "Onsite", "Intern"],
-        companyLogo: "",
+        companyLogo: "assets/logo/seagate.png",
         isFavorited: false
       )
     );
@@ -75,7 +75,7 @@ class RecentJobList {
         city: "Bangkok",
         jobRole: "Data Analyst",
         labels: ["Full-time", "Hybrid", "Intern"],
-        companyLogo: "",
+        companyLogo: "assets/logo/michelin.png",
         isFavorited: false
       )
     );
@@ -87,7 +87,7 @@ class RecentJobList {
         city: "Bangkok",
         jobRole: "Business Intelligence",
         labels: ["Full-time", "Onsite", "Senior"],
-        companyLogo: "",
+        companyLogo: "assets/logo/shopee.png",
         isFavorited: false
       )
     );

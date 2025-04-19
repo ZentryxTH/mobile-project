@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+import 'package:intrn/models/education_model.dart';
+import 'package:intrn/models/user_model.dart';
+import 'package:intrn/models/user_extended_model.dart';
+import 'package:intrn/data/repositories/user_repository.dart';
+import 'package:intrn/data/repositories/education_repository.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final User user;
+  final UserModel user;
+  final UserExtendedModel? extendedUser;
+  final EducationModel? educationModel;
 
-  const EditProfilePage({Key? key, required this.user}) : super(key: key);
+  const EditProfilePage({Key? key, required this.user, this.extendedUser, this.educationModel}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -12,27 +20,22 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  late User editableUser;
+  late UserModel editableUser;
+  late UserExtendedModel editableUserExtended;
+  late EducationModel editableEducation;
+  File? _image;
 
   @override
   void initState() {
     super.initState();
-    editableUser = User(
-      firstName: widget.user.firstName,
-      lastName: widget.user.lastName,
-      birthDate: widget.user.birthDate,
-      phone: widget.user.phone,
-      biography: widget.user.biography,
-      address1: widget.user.address1,
-      address2: widget.user.address2,
-      city: widget.user.city,
-      country: widget.user.country,
-      university: widget.user.university,
-      faculty: widget.user.faculty,
-      degree: widget.user.degree,
-      startDate: widget.user.startDate,
-      endDate: widget.user.endDate,
-      email: widget.user.email,
+    editableUser = widget.user; // Use passed UserModel
+    editableUserExtended = widget.extendedUser ?? UserExtendedModel(); // Handle possible null
+    editableEducation = widget.educationModel ?? EducationModel(
+      instructor: '',
+      faculty: '',
+      degree: '',
+      startDate: '',
+      endDate: '',
     );
   }
 
@@ -44,41 +47,117 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  Widget _buildTextFieldOptional(String label, String? value, Function(String?) onChanged) {
+    return TextFormField(
+      initialValue: value ?? '',
+      decoration: InputDecoration(labelText: label),
+      onChanged: onChanged,
+    );
+  }
+
+  Future<void> _showPickerDialog(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Profile")),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Color(0xFFF5F5F5),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Edit Profile",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 24,
+          ),
+        )
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/avatar.png'),
+              GestureDetector(
+                onTap: () => _showPickerDialog(context),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: File(editableUser.imageUrl!).existsSync()
+                      ? FileImage(File(editableUser.imageUrl!))
+                      : AssetImage('assets/avatar.png') as ImageProvider,
+                ),
               ),
               SizedBox(height: 20),
               _buildTextField("First Name", editableUser.firstName, (val) => editableUser.firstName = val),
               _buildTextField("Last Name", editableUser.lastName, (val) => editableUser.lastName = val),
               _buildTextField("Birth Date", editableUser.birthDate, (val) => editableUser.birthDate = val),
               _buildTextField("Phone", editableUser.phone, (val) => editableUser.phone = val),
-              _buildTextField("Biography", editableUser.biography, (val) => editableUser.biography = val),
-              _buildTextField("Address 1", editableUser.address1, (val) => editableUser.address1 = val),
-              _buildTextField("Address 2", editableUser.address2, (val) => editableUser.address2 = val),
-              _buildTextField("City", editableUser.city, (val) => editableUser.city = val),
+              _buildTextFieldOptional("Biography", editableUserExtended.biography, (val) => editableUserExtended.biography = val),
+              _buildTextFieldOptional("Address 1", editableUserExtended.address1, (val) => editableUserExtended.address1 = val),
+              _buildTextFieldOptional("Address 2", editableUserExtended.address2, (val) => editableUserExtended.address2 = val),
+              _buildTextFieldOptional("City", editableUserExtended.city, (val) => editableUserExtended.city = val),
               _buildTextField("Country", editableUser.country, (val) => editableUser.country = val),
-              _buildTextField("University", editableUser.university, (val) => editableUser.university = val),
-              _buildTextField("Faculty", editableUser.faculty, (val) => editableUser.faculty = val),
-              _buildTextField("Degree", editableUser.degree, (val) => editableUser.degree = val),
-              _buildTextField("Start Date", editableUser.startDate, (val) => editableUser.startDate = val),
-              _buildTextField("End Date", editableUser.endDate, (val) => editableUser.endDate = val),
-              _buildTextField("Email", editableUser.email, (val) => editableUser.email = val),
+              // Add Education Fields
+              SizedBox(height: 20),
+              _buildTextField("Instructor", editableEducation.instructor, (val) => editableEducation.instructor = val),
+              _buildTextField("Faculty", editableEducation.faculty, (val) => editableEducation.faculty = val),
+              _buildTextField("Degree", editableEducation.degree, (val) => editableEducation.degree = val),
+              _buildTextField("Start Date", editableEducation.startDate, (val) => editableEducation.startDate = val),
+              _buildTextField("End Date", editableEducation.endDate, (val) => editableEducation.endDate = val),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.pop(context, editableUser); // return the edited user
+                    try {
+                      // Save User Extended Data
+                      await UserRepository().createOrUpdateUserExtended(editableUserExtended);
+                      // Save Education Data
+                      await EducationRepository().saveEducation(editableEducation);
+                      Navigator.pop(context, editableUser); // return the edited user
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to save changes")));
+                    }
                   }
                 },
                 child: Text("Save Changes"),

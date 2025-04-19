@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(home: OnboardingPage());
+    return GetMaterialApp(
+      title: 'Intrn',
+      home: OnboardingPage()
+    );
   }
 }

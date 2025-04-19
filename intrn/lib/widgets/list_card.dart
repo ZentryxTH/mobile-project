@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/simulate/Inprogess_card_detail.dart';
-import 'package:intrn/simulate/Applied_card_detail.dart';
-import 'package:intrn/simulate/favourite_card_detail.dart';
+import 'package:intrn/pages/detail_page.dart/Inprogess_card_detail.dart';
+import 'package:intrn/pages/detail_page.dart/Applied_card_detail.dart';
+import 'package:intrn/pages/detail_page.dart/favourite_card_detail.dart';
 
 class Mycard extends StatefulWidget {
   final String jobTitle;

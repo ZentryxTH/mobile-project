@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class UserModel {
-  final String? id; // Firebase document ID (optional)
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String birthDate;
-  final String phone;
-  final String country;
+  String? id; // Firebase document ID (optional)
+  String firstName;
+  String lastName;
+  String email;
+  String birthDate;
+  String phone;
+  String country;
   String? imageUrl; // Nullable imageUrl to handle missing image
 
   // Constructor

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intrn/pages/main_page/home_page.dart';
+import 'package:intrn/pages/main_page/main_page.dart';
 
 PageRouteBuilder _fadeRoute(Widget page) {
   return PageRouteBuilder(
@@ -22,7 +22,7 @@ class FinishSignup extends StatefulWidget {
 class _FinishSignupPageState extends State<FinishSignup> {
 
   void _finish(){
-    Navigator.of(context).pushReplacement(_fadeRoute(HomePage()));
+    Navigator.of(context).pushReplacement(_fadeRoute(MainPage()));
   }
 
   @override

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EducationModel {
-  final String? id;
-  final String instructor;
-  final String faculty;
-  final String degree;
-  final String startDate;
-  final String endDate;
+  String? id;
+  String instructor;
+  String faculty;
+  String degree;
+  String startDate;
+  String endDate;
 
   EducationModel({
     this.id,
@@ -30,12 +30,11 @@ class EducationModel {
   factory EducationModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     return EducationModel(
-      id: doc.id,
-      instructor: data['instructor'],
-      faculty: data['faculty'],
-      degree: data['degree'],
-      startDate: data['startDate'],
-      endDate: data['endDate'],
+      instructor: data['instructor'] ?? '',
+      faculty: data['faculty'] ?? '',
+      degree: data['degree'] ?? '',
+      startDate: data['startDate'] ?? '',
+      endDate: data['endDate'] ?? '',
     );
   }
 }

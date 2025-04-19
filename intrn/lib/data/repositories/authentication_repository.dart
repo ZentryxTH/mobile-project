@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:intrn/pages/main_page/home_page.dart';
+import 'package:intrn/pages/main_page/main_page.dart';
 import 'package:intrn/pages/onboarding_page/onboarding_page.dart';
 
 class AuthenticationRepository extends GetxController {
@@ -39,7 +39,7 @@ class AuthenticationRepository extends GetxController {
     if (user == null) {
       Get.offAll(() => OnboardingPage());
     } else {
-      Get.offAll(() => HomePage());
+      Get.offAll(() => MainPage());
     }
   }
 
