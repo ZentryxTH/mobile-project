@@ -134,33 +134,36 @@ class Inprogessstate extends State<Inprogess> {
         ),
       ),
       bottomNavigationBar: Container(
-        child: Material(
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 250, 250, 250),
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(1),
-            topRight: Radius.circular(1),
+            topLeft: Radius.circular(28),
+            topRight: Radius.circular(28),
           ),
-          child: Container(
-            margin: EdgeInsets.only(left: 1, right: 1),
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 250, 250, 250),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(28),
-                topRight: Radius.circular(28),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 226, 226, 226),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: Offset(0, -2),
-                ),
-              ],
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 226, 226, 226),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, -2),
             ),
-            padding: const EdgeInsets.all(16.0),
-            child: apply_button(
-              text: 'Apply the job',
-              colorbackground: Colors.orange,
-              colortext: Colors.white,
+          ],
+        ),
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          height: 48, // Adjust height as needed
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 187, 61),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: const Center(
+            child: Text(
+              'Pending',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
@@ -197,7 +200,7 @@ class Inprogessstate extends State<Inprogess> {
           )],
           border: isSelected ? Border(
             bottom: BorderSide(
-              color: Colors.orange,
+              color: Color.fromARGB(255, 255, 122, 39),
               width: 3,
             ),
           ) : Border(

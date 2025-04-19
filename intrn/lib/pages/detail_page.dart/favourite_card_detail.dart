@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intrn/pages/detail_page.dart/ApplyPage.dart';
 import 'package:intrn/widgets/Information_tabbar.dart';
 import 'package:intrn/widgets/Information_card.dart';
+import 'package:intrn/widgets/apply_button.dart';
 
 
 class Favourite extends StatefulWidget {
@@ -157,14 +159,23 @@ class _FavouriteState extends State<Favourite> {
               ],
             ),
             padding: const EdgeInsets.all(16.0),
-            child: apply_button(
+            child: ApplyButton(
               text: 'Apply the job',
               colorbackground: Colors.orange,
               colortext: Colors.white,
+              onPressed: () {
+                // Navigate to ApplyPage when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ApplyPage(), // Pass jobTitle to ApplyPage if needed
+                  ),
+                );
+              },
             ),
           ),
         ),
-      ),
+      ) 
     );
   }
 
