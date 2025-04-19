@@ -9,9 +9,9 @@ class ListPage extends StatefulWidget {
 }
 
 class ListPagetate extends State<ListPage> {
-  List<String> favouriteList = ['Data science', 'test', 'test2'];
-  List<String> inProgressList = ['Data science'];
-  List<String> appliedlist = ['Data science'];
+  List<String> favouriteList = ['IT Support'];
+  List<String> inProgressList = ['IT Support'];
+  List<String> appliedlist = ['IT Support'];
 
   @override
   Widget build(BuildContext context) {
