@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intrn/data/repositories/authentication_repository.dart';
+import 'package:intrn/pages/chat_page/chat_list.dart';
 import 'package:intrn/widgets/category_filter.dart';
 import 'package:intrn/models/job_card_list.dart';
 import 'package:intrn/widgets/job_card.dart';
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(() => ChatList()),
                   icon: Icon(Icons.chat_outlined,
                     color: Colors.black,
                     size: 28,
