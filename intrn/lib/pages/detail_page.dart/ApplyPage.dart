@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:intrn/pages/other_page/finish_apply.dart';
 
 class ApplyPage extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _ApplyPageState extends State<ApplyPage> {
     if (_formKey.currentState!.validate()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => NextPage()), // Replace with your next page
+        MaterialPageRoute(builder: (context) => FinishApply()), // Replace with your next page
       );
     }
   }
