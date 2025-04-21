@@ -8,3 +8,5 @@ Members of this project
 
 Design :
 https://www.figma.com/design/b1FAshG4y2pm4CojgFoM5R/Mobile-Project?node-id=197-109&p=f&t=MY3jhl0RUWUaZDRC-0
+
+Video : https://drive.google.com/file/d/1dhqmMsAY32wFJxBo7fwOQYAm231wkNWW/view?usp=sharing
